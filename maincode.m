@@ -5,11 +5,11 @@ Load_Data
 
 % Set the desired temperature
 T = 37;
-% Set proton cytoplasm sizes
+% Set proton buffer sizes
 BX(1) = 0.10;    % matrix
-BX(2) = 100;     % cytoplasm
+BX(2) = 100;     % buffer
 BX(3) = 100;     % intermembrane space DAB
-% Proton cytoplasm binding constant(s)
+% Proton buffer binding constant(s)
 K_BX(1) = 1e-7; % DAB
 K_BX(2) = 10^(-7.2);
 K_BX(3) = 10^(-7.2);
@@ -84,28 +84,28 @@ x0(61) = 1.0e-9;        % Mg, IM
 x0(62) = 0.130;         % K, IM
 
 % CYTOPLASM VARIABLES
-x0(27) = 1e-12;         % ADP, cytoplasm
-x0(28) = 1e-12;         % ATP, cytoplasm
-x0(29) = 1e-12;         % Pi, cytoplasm
-x0(46) =  1e-12;        % pyruvate, cytoplasm
-x0(47) =  1e-12;        % citrate, cytoplasm
-x0(48) =  1e-12;        % oxoglutarate, cytoplasm
-x0(49) =  1e-12;        % succinate, cytoplasm
-x0(50) =  1e-12;        % glutamate, cytoplasm
-x0(51) =  1e-12;        % aspartate, cytoplasm
-x0(52) =  1e-12;        % malate, cytoplasm
-x0(53) =  0.19e-3;      % O2, cytoplasm
+x0(27) = 1e-12;         % ATP, buffer
+x0(28) = 1e-12;         % ADP, buffer
+x0(29) = 1e-12;         % Pi, buffer
+x0(46) =  1e-12;        % pyruvate, buffer
+x0(47) =  1e-12;        % citrate, buffer
+x0(48) =  1e-12;        % oxoglutarate, buffer
+x0(49) =  1e-12;        % succinate, buffer
+x0(50) =  1e-12;        % glutamate, buffer
+x0(51) =  1e-12;        % aspartate, buffer
+x0(52) =  1e-12;        % malate, buffer
+x0(53) =  0.19e-3;      % O2, buffer
 x0(57) = 10^-(7.2);     % H, buffer
 x0(58) = 1.0e-9;        % Mg, buffer
 x0(59) = 0.130;         % K, buffer
 
 % OTHER VARIABLES
 x0(63) = 0; % DPsi_im_to_matrix
-x0(64) = 0; % DPsi_cytoplasm_to_im
+x0(64) = 0; % DPsi_buffer_to_im
 x0(65) = 1.0; % initial PDH activity
 x0(66) = NADPtot; % initial NADP_matrix
 x0(67) = 0; % initial NADPH_matrix
-x0(68) = 0; % initial AMP_cytoplasm
+x0(68) = 0; % initial AMP_buffer
 x0(69) = 0; % K+ leak activity
 
 %% Simulations
@@ -127,18 +127,18 @@ for j = 1:length(doi)
 
   % State 1 simulation
   xsim0 = x0;
-  xsim0(29) = phosphate(i)*1e-3 ; % setting Pi, cytoplasm 
+  xsim0(29) = phosphate(i)*1e-3 ; % setting Pi, buffer 
   [tsim1,xsim1] = ode15s(@dXdT, [0 130], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase ); 
   
   % State 2 simulation
   xsim0 = xsim1(end,:);
-  xsim0(46) = pyr(i)*1e-3 ; % setting pyruvate, cytoplasm 
-  xsim0(52) = mal(i)*1e-3 ; % setting malate, cytoplasm 
-  xsim0(49) = suc(i)*1e-3 ; % setting succinate, cytoplasm 
-  xsim0(50) = glu(i)*1e-3 ; % setting glutamate, cytoplasm 
-  xsim0(48) = akg(i)*1e-3 ; % setting AKG, cytoplasm 
-  xsim0(47) = cit(i)*1e-3 ; % setting citrate, cytoplasm 
-  xsim0(51) = asp(i)*1e-3 ; % setting aspartate, cytoplasm 
+  xsim0(46) = pyr(i)*1e-3 ; % setting pyruvate, buffer 
+  xsim0(52) = mal(i)*1e-3 ; % setting malate, buffer 
+  xsim0(49) = suc(i)*1e-3 ; % setting succinate, buffer 
+  xsim0(50) = glu(i)*1e-3 ; % setting glutamate, buffer 
+  xsim0(48) = akg(i)*1e-3 ; % setting AKG, buffer 
+  xsim0(47) = cit(i)*1e-3 ; % setting citrate, buffer 
+  xsim0(51) = asp(i)*1e-3 ; % setting aspartate, buffer 
   [tsim2,xsim2] = ode15s(@dXdT, [130 280], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase );    
    
   % State 3 simulation
@@ -185,18 +185,18 @@ end
 % 
 %   % State 1 simulation
 %   xsim0 = x00;
-%   xsim0(29) = phosphate(i)*1e-3 ; % setting Pi, cytoplasm 
+%   xsim0(29) = phosphate(i)*1e-3 ; % setting Pi, buffer 
 %   [tsim1,xsim1] = ode15s(@dXdT, [0 130], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase ); 
 %   
 %   % State 2 simulation
 %   xsim0 = xsim1(end,:);
-%   xsim0(46) = pyr(i)*1e-3 ; % setting pyruvate, cytoplasm 
-%   xsim0(52) = mal(i)*1e-3 ; % setting malate, cytoplasm 
-%   xsim0(49) = suc(i)*1e-3 ; % setting succinate, cytoplasm 
-%   xsim0(50) = glu(i)*1e-3 ; % setting glutamate, cytoplasm 
-%   xsim0(43) = akg(i)*1e-3 ; % setting AKG, cytoplasm 
-%   xsim0(47) = cit(i)*1e-3 ; % setting citrate, cytoplasm 
-%   xsim0(51) = asp(i)*1e-3 ; % setting aspartate, cytoplasm 
+%   xsim0(46) = pyr(i)*1e-3 ; % setting pyruvate, buffer 
+%   xsim0(52) = mal(i)*1e-3 ; % setting malate, buffer 
+%   xsim0(49) = suc(i)*1e-3 ; % setting succinate, buffer 
+%   xsim0(50) = glu(i)*1e-3 ; % setting glutamate, buffer 
+%   xsim0(43) = akg(i)*1e-3 ; % setting AKG, buffer 
+%   xsim0(47) = cit(i)*1e-3 ; % setting citrate, buffer 
+%   xsim0(51) = asp(i)*1e-3 ; % setting aspartate, buffer 
 %   [tsim2,xsim2] = ode15s(@dXdT, [130 280], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase );    
 %    
 %   % State 3 simulation

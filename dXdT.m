@@ -12,11 +12,11 @@
 %   x     state variables at t=0
 %   T     temperature in degreesCelcius
 %   BX    buffer sizes
-%   K_BX  proton buffer dissociation constants ( matrix cytoplasm im )
+%   K_BX  proton buffer dissociation constants ( matrix buffer im )
 %   Pflag = 1 for plate reader, = 0 for oxygraph
 %
 % State Variables:
-% [pyruvate_matrix , COAS_matrix , NAD_matrix , CO2tot_matrix , acetylcoA_matrix , NADH_matrix , succinylcoA_matrix , citrate_matrix , succinate_matrix , ATP_matrix , ADP_matrix , oxaloacetate_matrix , AMP_matrix , Pi_matrix , isocitrate_matrix , ketoglutarate_matrix , C_matrix , GDP_matrix , GTP_matrix , coQ_matrix , coQH2_matrix , fumarate_matrix , malate_matrix , aspartate_matrix , glutamate_matrix , ammonia_matrix , ATP_cytoplasm , ADP_cytoplasm , Pi_cytoplasm , H2O2aq_matrix , SOaq_matrix , cytocox_im , cytocred_im , O2aq_matrix , ATP_im , Pi_im , ADP_im , pyruvate_im , glutamate_im , aspartate_im , citrate_im , malate_im , ketoglutarate_im , succinate_im , O2aq_im , pyruvate_cytoplasm , citrate_cytoplasm , ketoglutarate_cytoplasm , succinate_cytoplasm , glutamate_cytoplasm , aspartate_cytoplasm , malate_cytoplasm , O2aq_cytoplasm ]
+% [pyruvate_matrix , COAS_matrix , NAD_matrix , CO2tot_matrix , acetylcoA_matrix , NADH_matrix , succinylcoA_matrix , citrate_matrix , succinate_matrix , ATP_matrix , ADP_matrix , oxaloacetate_matrix , AMP_matrix , Pi_matrix , isocitrate_matrix , ketoglutarate_matrix , C_matrix , GDP_matrix , GTP_matrix , coQ_matrix , coQH2_matrix , fumarate_matrix , malate_matrix , aspartate_matrix , glutamate_matrix , ammonia_matrix , ATP_buffer , ADP_buffer , Pi_buffer , H2O2aq_matrix , SOaq_matrix , cytocox_im , cytocred_im , O2aq_matrix , ATP_im , Pi_im , ADP_im , pyruvate_im , glutamate_im , aspartate_im , citrate_im , malate_im , ketoglutarate_im , succinate_im , O2aq_im , pyruvate_buffer , citrate_buffer , ketoglutarate_buffer , succinate_buffer , glutamate_buffer , aspartate_buffer , malate_buffer , O2aq_buffer ]
 %
 
 function [f,J,varargout] = dXdT(~,x,T,BX,K_BX,Pflag,x_ATPase)
@@ -56,9 +56,9 @@ MinCon = 0;
 % 24 aspartate_matrix
 % 25 glutamate_matrix
 % 26 ammonia_matrix
-% 27 ATP_cytoplasm
-% 28 ADP_cytoplasm
-% 29 Pi_cytoplasm
+% 27 ATP_buffer
+% 28 ADP_buffer
+% 29 Pi_buffer
 % 30 H2O2aq_matrix
 % 31 SOaq_matrix
 % 32 cytocox_im
@@ -75,36 +75,36 @@ MinCon = 0;
 % 43 ketoglutarate_im
 % 44 succinate_im
 % 45 O2aq_im
-% 46 pyruvate_cytoplasm
-% 47 citrate_cytoplasm
-% 48 ketoglutarate_cytoplasm
-% 49 succinate_cytoplasm
-% 50 glutamate_cytoplasm
-% 51 aspartate_cytoplasm
-% 52 malate_cytoplasm
-% 53 O2aq_cytoplasm
+% 46 pyruvate_buffer
+% 47 citrate_buffer
+% 48 ketoglutarate_buffer
+% 49 succinate_buffer
+% 50 glutamate_buffer
+% 51 aspartate_buffer
+% 52 malate_buffer
+% 53 O2aq_buffer
 % 54 h_matrix
 % 55 m_matrix
 % 56 k_matrix
-% 57 h_cytoplasm
-% 58 m_cytoplasm
-% 59 k_cytoplasm
+% 57 h_buffer
+% 58 m_buffer
+% 59 k_buffer
 % 60 h_im
 % 61 m_im
 % 62 k_im
 % 63 DPsi_im_to_matrix
-% 64 DPsi_cytoplasm_to_im
+% 64 DPsi_buffer_to_im
 % 65 PDH activity
 % 66 NADP_matrix
 % 67 NADPH_matrix
-% 68 AMP_cytoplasm
+% 68 AMP_buffer
 % 69 x_HLE
 
 % PARTIAL VOLUME FRACTIONS
 VWater_matrix = 0.4705; % [=] l matrix water (l mito)^{-1}
 VRegion_matrix = 0.001; % [=] l mito (l cuvette)^{-1} 
-VWater_cytoplasm = 1; % [=] l water (l region)^{-1}
-VRegion_cytoplasm = 1 - VRegion_matrix; % [=] l buffer (l cuvette)^{-1} 
+VWater_buffer = 1; % [=] l water (l region)^{-1}
+VRegion_buffer = 1 - VRegion_matrix; % [=] l buffer (l cuvette)^{-1} 
 VWater_im = 0.2533; % [=] l im water (l mito)^{-1}
 VRegion_im = 0.001; % [=] l mito (l cuvette)^{-1}
 
@@ -149,9 +149,9 @@ malate_matrix = x(23);
 aspartate_matrix = x(24);
 glutamate_matrix = x(25);
 ammonia_matrix = x(26);
-ATP_cytoplasm = x(27);
-ADP_cytoplasm = x(28);
-Pi_cytoplasm = x(29);
+ATP_buffer = x(27);
+ADP_buffer = x(28);
+Pi_buffer = x(29);
 H2O2aq_matrix = x(30);
 SOaq_matrix = x(31);
 cytocox_im = x(32);
@@ -168,28 +168,28 @@ malate_im = x(42);
 ketoglutarate_im = x(43);
 succinate_im = x(44);
 O2aq_im = x(45);
-pyruvate_cytoplasm = x(46);
-citrate_cytoplasm = x(47);
-ketoglutarate_cytoplasm = x(48);
-succinate_cytoplasm = x(49);
-glutamate_cytoplasm = x(50);
-aspartate_cytoplasm = x(51);
-malate_cytoplasm = x(52);
-O2aq_cytoplasm = x(53);
+pyruvate_buffer = x(46);
+citrate_buffer = x(47);
+ketoglutarate_buffer = x(48);
+succinate_buffer = x(49);
+glutamate_buffer = x(50);
+aspartate_buffer = x(51);
+malate_buffer = x(52);
+O2aq_buffer = x(53);
 % Concentrations of H, Mg, and K
 h_matrix = x(54);
 m_matrix = x(55);
 k_matrix = x(56);
-h_cytoplasm = x(57);
-m_cytoplasm = x(58);
-k_cytoplasm = x(59);
+h_buffer = x(57);
+m_buffer = x(58);
+k_buffer = x(59);
 h_im = x(60);
 m_im = x(61);
 k_im = x(62);
 
 % Membrane potentials
 DPsi_im_to_matrix = x(63);
-DPsi_cytoplasm_to_im = x(64);
+DPsi_buffer_to_im = x(64);
 
 % Kinetic PDH regulation
 PDH_activity = x(65);
@@ -199,7 +199,7 @@ NADP_matrix  = x(66);
 NADPH_matrix = x(67);
 
 % AMP for AK reaction
-AMP_cytoplasm = x(68);
+AMP_buffer = x(68);
 
 % external ammonia
 ammonia_im        = 0;
@@ -312,15 +312,15 @@ Kk(25) = Inf;
 Kh(26) = 5.6234e-10;
 Km(26) = Inf;
 Kk(26) = Inf;
-% ATP_cytoplasm
+% ATP_buffer
 Kh(27) = 2.7566016511811682e-07;
 Km(27) = 8.4303632255990519e-05;
 Kk(27) = 0.09708512798373839;
-% ADP_cytoplasm
+% ADP_buffer
 Kh(28) = 4.1057373286278706e-07;
 Km(28) = 0.00071485288102034542;
 Kk(28) = 0.1319048728526625;
-% Pi_cytoplasm
+% Pi_buffer
 Kh(29) = 2.3075318323898138e-07;
 Km(29) = 0.028149416570991275;
 Kk(29) = 0.38034165601214515;
@@ -388,35 +388,35 @@ Kk(44) = 0.42863973618362095;
 Kh(45) = Inf;
 Km(45) = Inf;
 Kk(45) = Inf;
-% pyruvate_cytoplasm
+% pyruvate_buffer
 Kh(46) = 0.004342603252078945;
 Km(46) = 0.09553750450747911;
 Kk(46) = 0.11969801449130479;
-% citrate_cytoplasm
+% citrate_buffer
 Kh(47) = 2.7546665205956405e-06;
 Km(47) = 0.00048047139882426425;
 Kk(47) = 0.33133006036859936;
-% ketoglutarate_cytoplasm
+% ketoglutarate_buffer
 Kh(48) = Inf;
 Km(48) = Inf;
 Kk(48) = Inf;
-% succinate_cytoplasm
+% succinate_buffer
 Kh(49) = 6.4527518893172347e-06;
 Km(49) = 0.063877481692394447;
 Kk(49) = 0.42863973618362095;
-% glutamate_cytoplasm
+% glutamate_buffer
 Kh(50) = 8.1530280646559256e-05;
 Km(50) = Inf;
 Kk(50) = Inf;
-% aspartate_cytoplasm
+% aspartate_buffer
 Kh(51) = 0.00023023155676210814;
 Km(51) = Inf;
 Kk(51) = Inf;
-% malate_cytoplasm
+% malate_buffer
 Kh(52) = 2.3069280947427119e-05;
 Km(52) = 0.025828472176434858;
 Kk(52) = 0.79464635030879283;
-% O2aq_cytoplasm
+% O2aq_buffer
 Kh(53) = Inf;
 Km(53) = Inf;
 Kk(53) = Inf;
@@ -452,17 +452,17 @@ P( 26 ) = 1  + h_matrix/Kh(26) + m_matrix/Km(26) + k_matrix/Kk(26);
 P( 30 ) = 1  + h_matrix/Kh(30) + m_matrix/Km(30) + k_matrix/Kk(30);
 P( 31 ) = 1  + h_matrix/Kh(31) + m_matrix/Km(31) + k_matrix/Kk(31);
 P( 34 ) = 1  + h_matrix/Kh(34) + m_matrix/Km(34) + k_matrix/Kk(34);
-P( 27 ) = 1  + h_cytoplasm/Kh(27) + m_cytoplasm/Km(27) + k_cytoplasm/Kk(27);
-P( 28 ) = 1  + h_cytoplasm/Kh(28) + m_cytoplasm/Km(28) + k_cytoplasm/Kk(28);
-P( 29 ) = 1  + h_cytoplasm/Kh(29) + m_cytoplasm/Km(29) + k_cytoplasm/Kk(29);
-P( 46 ) = 1  + h_cytoplasm/Kh(46) + m_cytoplasm/Km(46) + k_cytoplasm/Kk(46);
-P( 47 ) = 1  + h_cytoplasm/Kh(47) + m_cytoplasm/Km(47) + k_cytoplasm/Kk(47);
-P( 48 ) = 1  + h_cytoplasm/Kh(48) + m_cytoplasm/Km(48) + k_cytoplasm/Kk(48);
-P( 49 ) = 1  + h_cytoplasm/Kh(49) + m_cytoplasm/Km(49) + k_cytoplasm/Kk(49);
-P( 50 ) = 1  + h_cytoplasm/Kh(50) + m_cytoplasm/Km(50) + k_cytoplasm/Kk(50);
-P( 51 ) = 1  + h_cytoplasm/Kh(51) + m_cytoplasm/Km(51) + k_cytoplasm/Kk(51);
-P( 52 ) = 1  + h_cytoplasm/Kh(52) + m_cytoplasm/Km(52) + k_cytoplasm/Kk(52);
-P( 53 ) = 1  + h_cytoplasm/Kh(53) + m_cytoplasm/Km(53) + k_cytoplasm/Kk(53);
+P( 27 ) = 1  + h_buffer/Kh(27) + m_buffer/Km(27) + k_buffer/Kk(27);
+P( 28 ) = 1  + h_buffer/Kh(28) + m_buffer/Km(28) + k_buffer/Kk(28);
+P( 29 ) = 1  + h_buffer/Kh(29) + m_buffer/Km(29) + k_buffer/Kk(29);
+P( 46 ) = 1  + h_buffer/Kh(46) + m_buffer/Km(46) + k_buffer/Kk(46);
+P( 47 ) = 1  + h_buffer/Kh(47) + m_buffer/Km(47) + k_buffer/Kk(47);
+P( 48 ) = 1  + h_buffer/Kh(48) + m_buffer/Km(48) + k_buffer/Kk(48);
+P( 49 ) = 1  + h_buffer/Kh(49) + m_buffer/Km(49) + k_buffer/Kk(49);
+P( 50 ) = 1  + h_buffer/Kh(50) + m_buffer/Km(50) + k_buffer/Kk(50);
+P( 51 ) = 1  + h_buffer/Kh(51) + m_buffer/Km(51) + k_buffer/Kk(51);
+P( 52 ) = 1  + h_buffer/Kh(52) + m_buffer/Km(52) + k_buffer/Kk(52);
+P( 53 ) = 1  + h_buffer/Kh(53) + m_buffer/Km(53) + k_buffer/Kk(53);
 P( 32 ) = 1  + h_im/Kh(32) + m_im/Km(32) + k_im/Kk(32);
 P( 33 ) = 1  + h_im/Kh(33) + m_im/Km(33) + k_im/Kk(33);
 P( 35 ) = 1  + h_im/Kh(35) + m_im/Km(35) + k_im/Kk(35);
@@ -514,9 +514,9 @@ NADH_free =(NADH_matrix-Kn_NADH-Xcp0_NADH+sqrt((NADH_matrix-Kn_NADH-Xcp0_NADH)^2
 NAD_free = NAD_matrix;
 
 x_AK = 2;
-P_AMPc = 1  + h_cytoplasm/Kh(13) + m_cytoplasm/Km(13) + k_cytoplasm/Kk(13);
+P_AMPc = 1  + h_buffer/Kh(13) + m_buffer/Km(13) + k_buffer/Kk(13);
 Keq_AK = (0.5633)*P_AMPc*P(27)/(P(28)^2);
-J_AK_cytoplasm = x_AK*( Keq_AK*ADP_cytoplasm*ADP_cytoplasm - AMP_cytoplasm*ATP_cytoplasm );
+J_AK_buffer = x_AK*( Keq_AK*ADP_buffer*ADP_buffer - AMP_buffer*ATP_buffer );
 
 % Mitochondrial proton translocating transhydrogenase (MPTT)
 % H_i + NADH + NADP = H_x + NAD + NADPH
@@ -794,6 +794,7 @@ H = h_matrix; % proton
 SUC = succinate_matrix; % succinate 
 FUM = fumarate_matrix; % fumarate
 MALO = 0; % malonate
+% MALO = 5e-3; % malonate
 OAA = oxaloacetate_matrix; % oxaloacetate
 
 MAL = malate_matrix; % malate
@@ -1296,13 +1297,13 @@ pq=0;
 end
 J_NDK_matrix=Vmf_NDK*Vmr*(ab-pq/Keq_NDK_matrix)/ai/(Vmr*KmB*a+Vmr*KmA*b+Vmf_NDK*KmQ/Keq_NDK_matrix*p+Vmf_NDK*KmP/Keq_NDK_matrix*q+Vmr*a*b+Vmf_NDK*KmQ/Kia/Keq_NDK_matrix*a*p+Vmf_NDK/Keq_NDK_matrix*p*q+Vmr*KmA/Kiq*b*q);
 
-%ATPASE_cytoplasm
+%ATPASE_buffer
 dG0 = -4.67;
-Keq = exp(-dG0)/h_cytoplasm*P(28)*P(29)/P(27);
-if ATP_cytoplasm > 1.0e-6
-  J_ATPASE_cytoplasm = x_ATPase/( 1 + ADP_cytoplasm/(0.10e-3))*(1 - ADP_cytoplasm*Pi_cytoplasm/(Keq)/ATP_cytoplasm); % from Bazil model
+Keq = exp(-dG0)/h_buffer*P(28)*P(29)/P(27);
+if ATP_buffer > 1.0e-6
+  J_ATPASE_buffer = x_ATPase/( 1 + ADP_buffer/(0.10e-3))*(1 - ADP_buffer*Pi_buffer/(Keq)/ATP_buffer); % from Bazil model
 else
-  J_ATPASE_cytoplasm = 0;
+  J_ATPASE_buffer = 0;
 end
 
 %F1F0ATPASE:im_to_matrix
@@ -2126,48 +2127,48 @@ J_DICARBOAA_im_to_matrix = 0;
 %O2PERM:im_to_matrix
 x_O2perm = 1000;
 J_O2PERM_im_to_matrix = x_O2perm*(O2aq_im - O2aq_matrix);
-%ADPPERM:cytoplasm_to_im
+%ADPPERM:buffer_to_im
 x_ADPPERM = 400;
-J_ADPPERM_cytoplasm_to_im = x_ADPPERM * (ADP_cytoplasm - ADP_im);
-%ATPPERM:cytoplasm_to_im
+J_ADPPERM_buffer_to_im = x_ADPPERM * (ADP_buffer - ADP_im);
+%ATPPERM:buffer_to_im
 x_ATPPERM = 400;
-J_ATPPERM_cytoplasm_to_im = x_ATPPERM * (ATP_cytoplasm - ATP_im);
-%PIPERM:cytoplasm_to_im
+J_ATPPERM_buffer_to_im = x_ATPPERM * (ATP_buffer - ATP_im);
+%PIPERM:buffer_to_im
 x_PIPERM = 400;
-J_PIPERM_cytoplasm_to_im = x_PIPERM * (Pi_cytoplasm - Pi_im);
-%HPERM:cytoplasm_to_im
+J_PIPERM_buffer_to_im = x_PIPERM * (Pi_buffer - Pi_im);
+%HPERM:buffer_to_im
 x_HPERM = 400;
-J_HPERM_cytoplasm_to_im = x_HPERM * (h_cytoplasm - h_im);
-%KPERM:cytoplasm_to_im
+J_HPERM_buffer_to_im = x_HPERM * (h_buffer - h_im);
+%KPERM:buffer_to_im
 x_KPERM = 400;
-J_KPERM_cytoplasm_to_im = x_KPERM * (k_cytoplasm - k_im);
-%MPERM:cytoplasm_to_im
+J_KPERM_buffer_to_im = x_KPERM * (k_buffer - k_im);
+%MPERM:buffer_to_im
 x_MPERM = 400;
-J_MPERM_cytoplasm_to_im = x_MPERM * (m_cytoplasm - m_im);
-%PYRPERM:cytoplasm_to_im
+J_MPERM_buffer_to_im = x_MPERM * (m_buffer - m_im);
+%PYRPERM:buffer_to_im
 x_PYRPERM = 400;
-J_PYRPERM_cytoplasm_to_im = x_PYRPERM * (pyruvate_cytoplasm - pyruvate_im);
-%CITPERM:cytoplasm_to_im
+J_PYRPERM_buffer_to_im = x_PYRPERM * (pyruvate_buffer - pyruvate_im);
+%CITPERM:buffer_to_im
 x_CITPERM = 400;
-J_CITPERM_cytoplasm_to_im = x_CITPERM * (citrate_cytoplasm - citrate_im);
-%AKGPERM:cytoplasm_to_im
+J_CITPERM_buffer_to_im = x_CITPERM * (citrate_buffer - citrate_im);
+%AKGPERM:buffer_to_im
 x_AKGPERM = 400;
-J_AKGPERM_cytoplasm_to_im = x_AKGPERM * (ketoglutarate_cytoplasm - ketoglutarate_im);
-%SUCPERM:cytoplasm_to_im
+J_AKGPERM_buffer_to_im = x_AKGPERM * (ketoglutarate_buffer - ketoglutarate_im);
+%SUCPERM:buffer_to_im
 x_SUCPERM = 400;
-J_SUCPERM_cytoplasm_to_im = x_SUCPERM * (succinate_cytoplasm - succinate_im);
-%GLUPERM:cytoplasm_to_im
+J_SUCPERM_buffer_to_im = x_SUCPERM * (succinate_buffer - succinate_im);
+%GLUPERM:buffer_to_im
 x_GLUPERM = 400;
-J_GLUPERM_cytoplasm_to_im = x_GLUPERM * (glutamate_cytoplasm - glutamate_im);
-%ASPPERM:cytoplasm_to_im
+J_GLUPERM_buffer_to_im = x_GLUPERM * (glutamate_buffer - glutamate_im);
+%ASPPERM:buffer_to_im
 x_ASPPERM = 400;
-J_ASPPERM_cytoplasm_to_im = x_ASPPERM * (aspartate_cytoplasm - aspartate_im);
-%MALPERM:cytoplasm_to_im
+J_ASPPERM_buffer_to_im = x_ASPPERM * (aspartate_buffer - aspartate_im);
+%MALPERM:buffer_to_im
 x_MALPERM = 400;
-J_MALPERM_cytoplasm_to_im = x_MALPERM * (malate_cytoplasm - malate_im);
-%O2PERM2:cytoplasm_to_im
+J_MALPERM_buffer_to_im = x_MALPERM * (malate_buffer - malate_im);
+%O2PERM2:buffer_to_im
 x_O2perm2 = 1000;
-J_O2PERM2_cytoplasm_to_im = x_O2perm2*(O2aq_cytoplasm - O2aq_im);
+J_O2PERM2_buffer_to_im = x_O2perm2*(O2aq_buffer - O2aq_im);
 
 %% REACTANT TIME DERIVATIVES
 f(1,:) = ( 0  - 1*J_PDH_matrix + 1*J_PYRH_im_to_matrix + J_OD + J_MALIC ) / VWater_matrix; % pyruvate_matrix
@@ -2201,38 +2202,38 @@ f(25,:) = ( 0  + 1*J_AAT_matrix - 1*J_GDH1_matrix + 1*J_ASPGLU_im_to_matrix + 1*
 f(26,:) = ( + 1*J_GDH1_matrix + 1*J_NH_im_to_matrix ) / VWater_matrix; % ammonia_matrix
 f(30,:) = ( 0  ); % [clamped] % H2O2aq_matrix
 f(31,:) = ( 0  ); % [clamped] % SOaq_matrix
-f(27,:) = ( 0  - 1*J_ATPASE_cytoplasm - 1*J_ATPPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im + J_AK_cytoplasm) / VWater_cytoplasm; % ATP_cytoplasm
-f(28,:) = ( 0  + 1*J_ATPASE_cytoplasm - 1*J_ADPPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im - 2*J_AK_cytoplasm) / VWater_cytoplasm; % ADP_cytoplasm
-f(29,:) = ( 0  + 1*J_ATPASE_cytoplasm - 1*J_PIPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % Pi_cytoplasm
-f(46,:) = ( 0  - 1*J_PYRPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % pyruvate_cytoplasm
-f(47,:) = ( 0  - 1*J_CITPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % citrate_cytoplasm
-f(48,:) = ( 0  - 1*J_AKGPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % ketoglutarate_cytoplasm
-f(49,:) = ( 0  - 1*J_SUCPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % succinate_cytoplasm
-f(50,:) = ( 0  - 1*J_GLUPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % glutamate_cytoplasm
-f(51,:) = ( 0  - 1*J_ASPPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % aspartate_cytoplasm
-f(52,:) = ( 0  - 1*J_MALPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % malate_cytoplasm
+f(27,:) = ( 0  - 1*J_ATPASE_buffer - 1*J_ATPPERM_buffer_to_im/VRegion_buffer*VRegion_im + J_AK_buffer) / VWater_buffer; % ATP_buffer
+f(28,:) = ( 0  + 1*J_ATPASE_buffer - 1*J_ADPPERM_buffer_to_im/VRegion_buffer*VRegion_im - 2*J_AK_buffer) / VWater_buffer; % ADP_buffer
+f(29,:) = ( 0  + 1*J_ATPASE_buffer - 1*J_PIPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % Pi_buffer
+f(46,:) = ( 0  - 1*J_PYRPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % pyruvate_buffer
+f(47,:) = ( 0  - 1*J_CITPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % citrate_buffer
+f(48,:) = ( 0  - 1*J_AKGPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % ketoglutarate_buffer
+f(49,:) = ( 0  - 1*J_SUCPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % succinate_buffer
+f(50,:) = ( 0  - 1*J_GLUPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % glutamate_buffer
+f(51,:) = ( 0  - 1*J_ASPPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % aspartate_buffer
+f(52,:) = ( 0  - 1*J_MALPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % malate_buffer
 f(32,:) = ( 0  - 2*J_ETC3_im_to_matrix/VRegion_im*VRegion_matrix + 2*J_ETC4_im_to_matrix/VRegion_im*VRegion_matrix ) / VWater_im; % cytocox_im 
 f(33,:) = ( 0  + 2*J_ETC3_im_to_matrix/VRegion_im*VRegion_matrix - 2*J_ETC4_im_to_matrix/VRegion_im*VRegion_matrix ) / VWater_im; % cytocred_im 
-f(35,:) = ( 0  + 1*J_ANT_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ATPPERM_cytoplasm_to_im ) / VWater_im; % ATP_im
-f(36,:) = ( 0  - 1*J_PIH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_DICARBPI_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_PIPERM_cytoplasm_to_im ) / VWater_im; % Pi_im 
-f(37,:) = ( 0  - 1*J_ANT_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ADPPERM_cytoplasm_to_im ) / VWater_im; % ADP_im
-f(38,:) = ( 0  - 1*J_PYRH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_PYRPERM_cytoplasm_to_im ) / VWater_im; % pyruvate_im
-f(39,:) = ( 0  - 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_GLUH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_GLUPERM_cytoplasm_to_im ) / VWater_im; % glutamate_im
-f(40,:) = ( 0  + 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ASPPERM_cytoplasm_to_im ) / VWater_im; % aspartate_im
-f(41,:) = ( 0  - 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_CITPERM_cytoplasm_to_im ) / VWater_im; % citrate_im
-f(42,:) = ( 0  + 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_AKGMAL_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_DICARBMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_MALPERM_cytoplasm_to_im ) / VWater_im; % malate_im
-f(43,:) = ( 0  - 1*J_AKGMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_AKGPERM_cytoplasm_to_im ) / VWater_im; % ketoglutarate_im
-f(44,:) = ( 0  + 1*J_SUCPERM_cytoplasm_to_im - 1*J_DICARBSUC_im_to_matrix/VRegion_im*VRegion_matrix ) / VWater_im; % succinate_im  
+f(35,:) = ( 0  + 1*J_ANT_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ATPPERM_buffer_to_im ) / VWater_im; % ATP_im
+f(36,:) = ( 0  - 1*J_PIH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_DICARBPI_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_PIPERM_buffer_to_im ) / VWater_im; % Pi_im 
+f(37,:) = ( 0  - 1*J_ANT_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ADPPERM_buffer_to_im ) / VWater_im; % ADP_im
+f(38,:) = ( 0  - 1*J_PYRH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_PYRPERM_buffer_to_im ) / VWater_im; % pyruvate_im
+f(39,:) = ( 0  - 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_GLUH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_GLUPERM_buffer_to_im ) / VWater_im; % glutamate_im
+f(40,:) = ( 0  + 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_ASPPERM_buffer_to_im ) / VWater_im; % aspartate_im
+f(41,:) = ( 0  - 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_CITPERM_buffer_to_im ) / VWater_im; % citrate_im
+f(42,:) = ( 0  + 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_AKGMAL_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_DICARBMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_MALPERM_buffer_to_im ) / VWater_im; % malate_im
+f(43,:) = ( 0  - 1*J_AKGMAL_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_AKGPERM_buffer_to_im ) / VWater_im; % ketoglutarate_im
+f(44,:) = ( 0  + 1*J_SUCPERM_buffer_to_im - 1*J_DICARBSUC_im_to_matrix/VRegion_im*VRegion_matrix ) / VWater_im; % succinate_im  
 
 % oxygen kinetics
 if Pflag
   f(34,:) = 0; % O2aq_matrix
-  f(53,:) = 0; % O2aq_cytoplasm
+  f(53,:) = 0; % O2aq_buffer
   f(45,:) = 0; % O2aq_im
 else
   f(34,:) = ( 0  - 0.5*J_ETC4_im_to_matrix + 1*J_O2PERM_im_to_matrix - 0*JSO1 - 0*JSO3 ) / VWater_matrix; % O2aq_matrix
-  f(53,:) = ( 0  - 1*J_O2PERM2_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm; % O2aq_cytoplasm
-  f(45,:) = ( 0  - 1*J_O2PERM_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_O2PERM2_cytoplasm_to_im ) / VWater_im; % O2aq_im
+  f(53,:) = ( 0  - 1*J_O2PERM2_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer; % O2aq_buffer
+  f(45,:) = ( 0  - 1*J_O2PERM_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_O2PERM2_buffer_to_im ) / VWater_im; % O2aq_im
 end
 
 % added (DAB) for NADP(H)
@@ -2240,7 +2241,7 @@ f(66,:) = ( 0  - 1*J_MPTT ) / VWater_matrix; % NADP_matrix
 f(67,:) = ( 0  + 1*J_MPTT ) / VWater_matrix; % NADPH_matrix
 
 % added (NLC) for AK reaction
-f(68,:) = ( + J_AK_cytoplasm) / VWater_cytoplasm; % AMP_cytoplasm
+f(68,:) = ( + J_AK_buffer) / VWater_buffer; % AMP_buffer
 
 % HLeak kinetics
 Q0 = 0.25*Qtot;
@@ -2295,31 +2296,31 @@ f(55,:) =  ( (aK*pMBpH - pKBpH*pMBpK)*Phi_H + ...
 f(56,:) =  ( (aM*pKBpH - pKBpM*pMBpH)*Phi_H + ...
             (aH*pKBpM - pKBpH*pHBpM)*Phi_M + ...
             (pMBpH*pHBpM - aH*aM)*Phi_K ) / D;
-% COMPARTMENT cytoplasm:
-ii = [27  28  29  46  47  48  49  50  51  52  53]; % Indices of SVs in compartment cytoplasm
+% COMPARTMENT buffer:
+ii = [27  28  29  46  47  48  49  50  51  52  53]; % Indices of SVs in compartment buffer
 % PARTIAL DERIVATIVES
-pHBpK = -sum( (h_cytoplasm*x(ii)'./Kh(ii))./(Kk(ii).*P(ii).^2) );
-pHBpM = -sum( (h_cytoplasm*x(ii)'./Kh(ii))./(Km(ii).*P(ii).^2) );
-pHBpH = +sum( (1+m_cytoplasm./Km(ii)+k_cytoplasm./Kk(ii)).*x(ii)'./(Kh(ii).*P(ii).^2) );
-pMBpH = -sum( (m_cytoplasm*x(ii)'./Km(ii))./(Kh(ii).*P(ii).^2) );
-pMBpK = -sum( (m_cytoplasm*x(ii)'./Km(ii))./(Kk(ii).*P(ii).^2) );
-pMBpM = +sum( (1+h_cytoplasm./Kh(ii)+k_cytoplasm./Kk(ii)).*x(ii)'./(Km(ii).*P(ii).^2) );
-pKBpH = -sum( (k_cytoplasm*x(ii)'./Kk(ii))./(Kh(ii).*P(ii).^2) );
-pKBpM = -sum( (k_cytoplasm*x(ii)'./Kk(ii))./(Km(ii).*P(ii).^2) );
-pKBpK = +sum( (1+h_cytoplasm./Kh(ii)+m_cytoplasm./Km(ii)).*x(ii)'./(Kk(ii).*P(ii).^2) );
+pHBpK = -sum( (h_buffer*x(ii)'./Kh(ii))./(Kk(ii).*P(ii).^2) );
+pHBpM = -sum( (h_buffer*x(ii)'./Kh(ii))./(Km(ii).*P(ii).^2) );
+pHBpH = +sum( (1+m_buffer./Km(ii)+k_buffer./Kk(ii)).*x(ii)'./(Kh(ii).*P(ii).^2) );
+pMBpH = -sum( (m_buffer*x(ii)'./Km(ii))./(Kh(ii).*P(ii).^2) );
+pMBpK = -sum( (m_buffer*x(ii)'./Km(ii))./(Kk(ii).*P(ii).^2) );
+pMBpM = +sum( (1+h_buffer./Kh(ii)+k_buffer./Kk(ii)).*x(ii)'./(Km(ii).*P(ii).^2) );
+pKBpH = -sum( (k_buffer*x(ii)'./Kk(ii))./(Kh(ii).*P(ii).^2) );
+pKBpM = -sum( (k_buffer*x(ii)'./Kk(ii))./(Km(ii).*P(ii).^2) );
+pKBpK = +sum( (1+h_buffer./Kh(ii)+m_buffer./Km(ii)).*x(ii)'./(Kk(ii).*P(ii).^2) );
 % PHIs
-J_H = (0 + 1*J_ATPASE_cytoplasm - 1*J_HPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im) / VWater_cytoplasm;
-J_M = (0 - 1*J_MPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im) / VWater_cytoplasm;
-J_K = (0 - 1*J_KPERM_cytoplasm_to_im/VRegion_cytoplasm*VRegion_im ) / VWater_cytoplasm;
-Phi_H = J_H - sum( h_cytoplasm*f(ii)'./(Kh(ii).*P(ii)) );
-Phi_M = J_M - sum( m_cytoplasm*f(ii)'./(Km(ii).*P(ii)) );
-Phi_K = J_K - sum( k_cytoplasm*f(ii)'./(Kk(ii).*P(ii)) );
+J_H = (0 + 1*J_ATPASE_buffer - 1*J_HPERM_buffer_to_im/VRegion_buffer*VRegion_im) / VWater_buffer;
+J_M = (0 - 1*J_MPERM_buffer_to_im/VRegion_buffer*VRegion_im) / VWater_buffer;
+J_K = (0 - 1*J_KPERM_buffer_to_im/VRegion_buffer*VRegion_im ) / VWater_buffer;
+Phi_H = J_H - sum( h_buffer*f(ii)'./(Kh(ii).*P(ii)) );
+Phi_M = J_M - sum( m_buffer*f(ii)'./(Km(ii).*P(ii)) );
+Phi_K = J_K - sum( k_buffer*f(ii)'./(Kk(ii).*P(ii)) );
 % ALPHAs
 aH = 1 + pHBpH;
 aM = 1 + pMBpM;
 aK = 1 + pKBpK;
 % ADDITIONAL BUFFER for [H+]
-aH = 1 + pHBpH + BX(2)/K_BX(2)/(1+h_cytoplasm/K_BX(2))^2; % M
+aH = 1 + pHBpH + BX(2)/K_BX(2)/(1+h_buffer/K_BX(2))^2; % M
 % DENOMINATOR
 D = aH*pKBpM*pMBpK + aK*pHBpM*pMBpH + aM*pHBpK*pKBpH - ...
     aM*aK*aH - pHBpK*pKBpM*pMBpH - pHBpM*pMBpK*pKBpH;
@@ -2346,9 +2347,9 @@ pKBpH = -sum( (k_im*x(ii)'./Kk(ii))./(Kh(ii).*P(ii).^2) );
 pKBpM = -sum( (k_im*x(ii)'./Kk(ii))./(Km(ii).*P(ii).^2) );
 pKBpK = +sum( (1+h_im./Kh(ii)+m_im./Km(ii)).*x(ii)'./(Kk(ii).*P(ii).^2) );
 % PHIs
-J_H = (0 - 2.66667*J_F1F0ATPASE_im_to_matrix/VRegion_im*VRegion_matrix + 4*J_ETC1_im_to_matrix/VRegion_im*VRegion_matrix + (2 + 2)*J_ETC3_im_to_matrix/VRegion_im*VRegion_matrix + (4-2)*J_ETC4_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_HLEAK_im_to_matrix/VRegion_im*VRegion_matrix - 2*J_PIH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_KH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_PYRH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_GLUH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_HPERM_cytoplasm_to_im - 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix  - 1*J_MPTT/VRegion_im*VRegion_matrix  ) / VWater_im;
-J_M = (0 + 1*J_MPERM_cytoplasm_to_im) / VWater_im;
-J_K = (0 - 1*J_KH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_KLEAK_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_KPERM_cytoplasm_to_im ) / VWater_im;
+J_H = (0 - 2.66667*J_F1F0ATPASE_im_to_matrix/VRegion_im*VRegion_matrix + 4*J_ETC1_im_to_matrix/VRegion_im*VRegion_matrix + (2 + 2)*J_ETC3_im_to_matrix/VRegion_im*VRegion_matrix + (4-2)*J_ETC4_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_HLEAK_im_to_matrix/VRegion_im*VRegion_matrix - 2*J_PIH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_KH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_PYRH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_GLUH_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_HPERM_buffer_to_im - 1*J_ASPGLU_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_CITMAL_im_to_matrix/VRegion_im*VRegion_matrix  - 1*J_MPTT/VRegion_im*VRegion_matrix  ) / VWater_im;
+J_M = (0 + 1*J_MPERM_buffer_to_im) / VWater_im;
+J_K = (0 - 1*J_KH_im_to_matrix/VRegion_im*VRegion_matrix - 1*J_KLEAK_im_to_matrix/VRegion_im*VRegion_matrix + 1*J_KPERM_buffer_to_im ) / VWater_im;
 Phi_H = J_H - sum( h_im*f(ii)'./(Kh(ii).*P(ii)) );
 Phi_M = J_M - sum( m_im*f(ii)'./(Km(ii).*P(ii)) );
 Phi_K = J_K - sum( k_im*f(ii)'./(Kk(ii).*P(ii)) );
@@ -2375,8 +2376,8 @@ f(62,:) =  ( (aM*pKBpH - pKBpM*pMBpH)*Phi_H + ...
 %% ELECTROPHYS EQUATIONS
 C_im_to_matrix = 3.0e-6;%*(1+abs(DPsi_im_to_matrix/10));
 f(63) = ( 0 - 2.66667*J_F1F0ATPASE_im_to_matrix  + 4*J_ETC1_im_to_matrix  + 2*J_ETC3_im_to_matrix  + 4*J_ETC4_im_to_matrix  - 1*J_HLEAK_im_to_matrix - 1*J_KLEAK_im_to_matrix - 1*J_ANT_im_to_matrix  + 1*J_ASPGLU_im_to_matrix - 1*J_MPTT ) / C_im_to_matrix ;
-% C_cytoplasm_to_im = Inf;
-% f(64) = ( 0 + 1*J_HPERM_cytoplasm_to_im  + 1*J_KPERM_cytoplasm_to_im  + 2*J_MPERM_cytoplasm_to_im ) / C_cytoplasm_to_im;
+% C_buffer_to_im = Inf;
+% f(64) = ( 0 + 1*J_HPERM_buffer_to_im  + 1*J_KPERM_buffer_to_im  + 2*J_MPERM_buffer_to_im ) / C_buffer_to_im;
 f(64) = 0;
 %% FLUX VECTOR:
 J(1) =  J_PDH_matrix;
@@ -2391,7 +2392,7 @@ J(9) =  J_MDH_matrix;
 J(10) =  J_NDK_matrix;
 J(11) =  J_AAT_matrix;
 J(12) =  J_GDH1_matrix;
-J(13) =  J_ATPASE_cytoplasm;
+J(13) =  J_ATPASE_buffer;
 J(14) =  J_F1F0ATPASE_im_to_matrix;
 J(15) =  J_ETC1_im_to_matrix;
 J(16) =  J_ETC3_im_to_matrix;
@@ -2408,20 +2409,20 @@ J(26) =  J_AKGMAL_im_to_matrix;
 J(27) =  0;
 J(28) =  0;
 J(29) =  J_O2PERM_im_to_matrix;
-J(30) =  J_ADPPERM_cytoplasm_to_im;
-J(31) =  J_ATPPERM_cytoplasm_to_im;
-J(32) =  J_PIPERM_cytoplasm_to_im;
-J(33) =  J_HPERM_cytoplasm_to_im;
-J(34) =  J_KPERM_cytoplasm_to_im;
-J(35) =  J_MPERM_cytoplasm_to_im;
-J(36) =  J_PYRPERM_cytoplasm_to_im;
-J(37) =  J_CITPERM_cytoplasm_to_im;
-J(38) =  J_AKGPERM_cytoplasm_to_im;
-J(39) =  J_SUCPERM_cytoplasm_to_im;
-J(40) =  J_GLUPERM_cytoplasm_to_im;
-J(41) =  J_ASPPERM_cytoplasm_to_im;
-J(42) =  J_MALPERM_cytoplasm_to_im;
-J(43) =  J_O2PERM2_cytoplasm_to_im;
+J(30) =  J_ADPPERM_buffer_to_im;
+J(31) =  J_ATPPERM_buffer_to_im;
+J(32) =  J_PIPERM_buffer_to_im;
+J(33) =  J_HPERM_buffer_to_im;
+J(34) =  J_KPERM_buffer_to_im;
+J(35) =  J_MPERM_buffer_to_im;
+J(36) =  J_PYRPERM_buffer_to_im;
+J(37) =  J_CITPERM_buffer_to_im;
+J(38) =  J_AKGPERM_buffer_to_im;
+J(39) =  J_SUCPERM_buffer_to_im;
+J(40) =  J_GLUPERM_buffer_to_im;
+J(41) =  J_ASPPERM_buffer_to_im;
+J(42) =  J_MALPERM_buffer_to_im;
+J(43) =  J_O2PERM2_buffer_to_im;
 J(44) =  JSO3 ; 
 J(45) =  J_MALIC;
 J(46) = 0;
