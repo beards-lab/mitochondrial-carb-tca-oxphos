@@ -220,7 +220,7 @@ end
 
 %% P+M (low pyr) - low and high Pi (experiments 1, 2) 
     
-figure(2); clf; 
+figure(1); clf; 
     
 axes('position',[0.125 0.540 0.40 0.40]); hold on
 plot(tN_01,N_01,'g-','linewidth',2);
@@ -258,7 +258,7 @@ axis([100 600 0 100]); box on
 
 %% P+M (med pyr) - low and high Pi (experiments 3, 4, 7, 8) 
    
-figure(4); clf;
+figure(3); clf;
     
 axes('position',[0.125 0.540 0.40 0.40]); hold on
 g = fill([tN_03; flip(tN_03)],[N_03+eN_03; flip(N_03-eN_03)],'g','Linewidth',1,'Edgecolor','g');
@@ -298,145 +298,6 @@ xlabel('$t$ (sec)','interpreter','latex')
 set(gca,'yticklabel',[]);
 set(gca,'xtick',0:100:500);
 axis([100 600 0 100]); box on
-
-%% P+M (med pyr) - high Pi (experiments 3, 4, 7, 8)  - PDH activity plot
-
-% figure(4); clf; 
-%     
-% axes('position',[0.125 0.575 0.40 0.40]); hold on
-% plot(tsim_ox{3}, xsim_ox{3}(:,65), 'k-', 'linewidth', 2)
-% plot(tsim_ox{7}, xsim_ox{7}(:,65), 'r-', 'linewidth', 2)
-% ylabel('PDH Actitivity (rel.)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on
-% legend('ADP = 0.375','ADP = 1 mM');
-% 
-% axes('position',[0.550 0.575 0.40 0.40]); hold on
-% plot(tsim_ox{4}, xsim_ox{4}(:,65), 'k-', 'linewidth', 2)
-% plot(tsim_ox{8}, xsim_ox{8}(:,65), 'r-', 'linewidth', 2)
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on   
-
-%% P+M (hig pyr) - low and high Pi (experiments 5, 6, 9, 10)
-
-% figure(5); clf;
-% 
-% axes('position',[0.125 0.575 0.40 0.40]); hold on;
-% % fill([tN_05; flip(tN_05)],[N_05+eN_05; flip(N_05-eN_05)],'g','linestyle','none');
-% % plot(tsim_N{5}, Nr_sim{5}, 'k-', 'linewidth', 2)
-% ylabel('NAD(P)H (rel.)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]); hold on;
-% % fill([tN_06; flip(tN_06)],[N_06+eN_06; flip(N_06-eN_06)],'g','linestyle','none');
-% % plot(tsim_N{6}, Nr_sim{6}, 'k-', 'linewidth', 2)
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on;
-% fill([tJ_05; flip(tJ_05)],[J_05+eJ_05; flip(J_05-eJ_05)],'g','Linewidth',1,'Edgecolor','g');
-% fill([tJ_09; flip(tJ_09)],[J_09+eJ_09; flip(J_09-eJ_09)],'y','Linewidth',1,'Edgecolor','y');
-% % plot(tsim_ox{5}, J_o2_el{5}, 'k-', 'linewidth', 2); 
-% % plot(tsim_ox{9}, J_o2_el{9}, 'r-', 'linewidth', 2); 
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% legend('ADP = 0.375','ADP = 1 mM');
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on;
-% fill([tJ_06; flip(tJ_06)],[J_06+eJ_06; flip(J_06-eJ_06)],'g','Linewidth',1,'Edgecolor','g');
-% fill([tJ_10; flip(tJ_10)],[J_10+eJ_10; flip(J_10-eJ_10)],'y','Linewidth',1,'Edgecolor','y');
-% % plot(tsim_ox{6}, J_o2_el{6}, 'k-', 'linewidth', 2)
-% % plot(tsim_ox{10}, J_o2_el{10}, 'r-', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-
-%% P only (experiments 11 and 12)
-   
-% figure(11); clf;
-% 
-% axes('position',[0.125 0.575 0.40 0.40]); hold on;
-% plot(tN_11,N_11,'g-','linewidth',2);
-% plot(tsim_N{11}, Nr_sim{11}, 'k-', 'linewidth', 2)
-% ylabel('NAD(P)H (rel.)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]); hold on;
-% plot(tN_12,N_12,'g','linewidth',2);
-% plot(tsim_N{12}, Nr_sim{12}, 'k-', 'linewidth', 2)
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on;
-% fill([tJ_11; flip(tJ_11)],[J_11+eJ_11; flip(J_11-eJ_11)],'g','linewidth',2,'Edgecolor','g');
-% plot(tsim_ox{11}, J_o2_el{11}, 'k-', 'linewidth', 2); 
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on;
-% fill([tJ_12; flip(tJ_12)],[J_12+eJ_12; flip(J_12-eJ_12)],'g','linewidth',2,'Edgecolor','g');
-% plot(tsim_ox{12}, J_o2_el{12}, 'k-', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box 
-
-%% P+M (med pyr, high mal) - low and high Pi (experiments 13, 14, 15, 16) 
-   
-% figure(13); clf; 
-%     
-% % axes('position',[0.125 0.575 0.40 0.40]); hold on
-% % % plot(tsim_N{13}, Nr_sim{13}, 'k-', 'linewidth', 2)
-% % % plot(tsim_N{15}, Nr_sim{15}, 'r-', 'linewidth', 2)
-% % ylabel('NAD(P)H (rel.)','interpreter','latex')
-% % set(gca,'xticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on
-% % 
-% % axes('position',[0.550 0.575 0.40 0.40]); hold on
-% % % plot(tsim_N{14}, Nr_sim{14}, 'k-', 'linewidth', 2)
-% % % plot(tsim_N{16}, Nr_sim{16}, 'r-', 'linewidth', 2)
-% % set(gca,'xticklabel',[]);
-% % set(gca,'yticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on
-% pp = plot(tJ_13,J_13,'linewidth',2); pp.Color = 'g'; 
-% pp = plot(tJ_15,J_15,'linewidth',2); pp.Color = 'y'; 
-% plot(tsim_ox{13}, J_o2_el{13}, 'k-', 'linewidth', 2); 
-% plot(tsim_ox{15}, J_o2_el{15}, 'r-', 'linewidth', 2)
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% legend('2.5 mal','5.0 mal');
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on
-% pp = plot(tJ_14,J_14,'linewidth',2); pp.Color = 'g'; 
-% pp = plot(tJ_16,J_16,'linewidth',2); pp.Color = 'y'; 
-% plot(tsim_ox{14}, J_o2_el{14}, 'k-', 'linewidth', 2); 
-% plot(tsim_ox{16}, J_o2_el{16}, 'r-', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
 
 %% S - low and high Pi (experiments 17 and 18)
 %  S + M - low and high Pi (experiments 19 and 20)
@@ -570,152 +431,6 @@ set(gca,'yticklabel',[]);
 set(gca,'xtick',0:100:500);
 axis([100 600 0 100]); box on
 
-%% G and G+M - low and high Pi (experiments 27, 28, 29, 30)
-
-% figure(27); clf;
-%     
-% % axes('position',[0.125 0.575 0.40 0.40]); hold on
-% % plot(tN_27,N_27,'g','linewidth',4);
-% % plot(tsim_N{27}, Nr_sim{27}, 'k', 'linewidth', 2)
-% % ylabel('NAD(P)H (rel.)','interpreter','latex')
-% % set(gca,'xticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on
-% % 
-% % axes('position',[0.550 0.575 0.40 0.40]); hold on
-% % plot(tN_28,N_28,'g','linewidth',4);
-% % plot(tsim_N{28}, Nr_sim{28}, 'k', 'linewidth', 2)
-% % set(gca,'xticklabel',[]);
-% % set(gca,'yticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.540 0.40 0.40]); hold on
-% fill([tJ_27; flip(tJ_27)],[J_27+eJ_27; flip(J_27-eJ_27)],'g','Linewidth',1,'Edgecolor','g');
-% plot(tsim_ox{27}, J_o2_el{27}, 'k', 'linewidth', 2)
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',[]);
-% axis([100 600 0 100]); box on
-% text(225,107.5,'Low Pi (0.5 mM)','fontsize',12,'interpreter','latex')
-% 
-% axes('position',[0.550 0.540 0.40 0.40]); hold on
-% % fill([tJ_28; flip(tJ_28)],[J_28+eJ_28; flip(J_28-eJ_28)],'g','Linewidth',1,'Edgecolor','g');
-% plot(tJ_28,J_28,'g','Linewidth',3,'Color','g');
-% plot(tsim_ox{28}, J_o2_el{28}, 'k', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',[]);
-% axis([100 600 0 100]); box on
-% text(225,107.5,'High Pi (2.5 mM)','fontsize',12,'interpreter','latex')
-% 
-% % figure(29); clf;
-%     
-% % axes('position',[0.125 0.575 0.40 0.40]); hold on
-% % plot(tN_29,N_29,'g','linewidth',4);
-% % plot(tsim_N{29}, Nr_sim{29}, 'k', 'linewidth', 2)
-% % ylabel('NAD(P)H (rel.)','interpreter','latex')
-% % set(gca,'xticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on
-% % 
-% % axes('position',[0.550 0.575 0.40 0.40]); hold on
-% % plot(tN_30,N_30,'g','linewidth',4);
-% % plot(tsim_N{30}, Nr_sim{30}, 'k', 'linewidth', 2)
-% % set(gca,'xticklabel',[]);
-% % set(gca,'yticklabel',[]);
-% % set(gca,'xtick',0:100:500);
-% % axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.090 0.40 0.40]); hold on
-% fill([tJ_29; flip(tJ_29)],[J_29+eJ_29; flip(J_29-eJ_29)],'g','Linewidth',1,'Edgecolor','g');
-% plot(tsim_ox{29}, J_o2_el{29}, 'k', 'linewidth', 2)
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% 
-% axes('position',[0.550 0.090 0.40 0.40]); hold on
-% % fill([tJ_30; flip(tJ_30)],[J_30+eJ_30; flip(J_30-eJ_30)],'g','Linewidth',1,'Edgecolor','g');
-% plot(tJ_30,J_30,'g','Linewidth',3,'Color','g');
-% plot(tsim_ox{30}, J_o2_el{30}, 'k', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-
-%% GLU+ASP - low and high Pi (experiments 31 and 32)
-
-% figure(31); clf;
-%     
-% axes('position',[0.125 0.575 0.40 0.40]); hold on
-% plot(tN_31,N_31,'g','linewidth',4);
-% plot(tsim_N{31}, Nr_sim{31}, 'k', 'linewidth', 2)
-% ylabel('NAD(P)H (rel.)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]); hold on
-% plot(tN_32,N_32,'g','linewidth',4);
-% plot(tsim_N{32}, Nr_sim{32}, 'k', 'linewidth', 2)
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on
-% plot(tJ_31,J_31,'g','linewidth',4);
-% plot(tsim_ox{31}, J_o2_el{31}, 'k', 'linewidth', 2)
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on
-% plot(tJ_32,J_32,'g','linewidth',4);
-% plot(tsim_ox{32}, J_o2_el{32}, 'k', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-
-%% C+M - low and high Pi (experiments 33 and 34)
-
-% figure(33); clf;
-%     
-% axes('position',[0.125 0.575 0.40 0.40]); hold on
-% plot(tN_33,N_33,'linewidth',2,'Color','g'); 
-% plot(tsim_N{33}, Nr_sim{33}, 'k', 'linewidth', 2)
-% ylabel('NAD(P)H (rel.)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]); hold on
-% plot(tN_34,N_34,'linewidth',2,'Color','g'); 
-% plot(tsim_N{34}, Nr_sim{34}, 'k', 'linewidth', 2)
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 1]); box on   
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on
-% plot(tJ_33,J_33,'g','linewidth',4);
-% plot(tsim_ox{33}, J_o2_el{33}, 'k', 'linewidth', 2)
-% ylabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on
-% plot(tJ_34,J_34,'g','linewidth',4);
-% plot(tsim_ox{34}, J_o2_el{34}, 'k', 'linewidth', 2)
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:500);
-% axis([100 600 0 100]); box on
-
 %% S+G - low and high Pi (experiments 35-38)
 % also plotting S experiments 17 and 18
 
@@ -765,122 +480,81 @@ set(gca,'xtick',0:100:600);
 axis([100 650 0 100]); box on
 text(225,107.5,'High Pi (2.5 mM)','fontsize',12,'interpreter','latex')
 
-%% Plots of metabolite measuremenst for exps. 3 & 4
+% Plots of metabolite measuremenst for exps. 3 & 4
 
-% % total metabolite levels, high and low Pi
-% ATP_lp =  xsim_ox{3}(:,27)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,10) + Vmito*VWater_im* xsim_ox{3}(:,35);
-% ATP_hp =  xsim_ox{4}(:,27)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,10) + Vmito*VWater_im* xsim_ox{4}(:,35);
-% ADP_lp =  xsim_ox{3}(:,28)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,11) + Vmito*VWater_im* xsim_ox{3}(:,37);
-% ADP_hp =  xsim_ox{4}(:,28)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,11) + Vmito*VWater_im* xsim_ox{4}(:,37);
-% AMP_lp =  xsim_ox{3}(:,68)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,13) ;
-% AMP_hp =  xsim_ox{4}(:,68)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,13) ;
-% PYR_lp =  xsim_ox{3}(:,46)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,1) + Vmito*VWater_im* xsim_ox{3}(:,38);
-% PYR_hp =  xsim_ox{4}(:,46)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,1) + Vmito*VWater_im* xsim_ox{4}(:,38);
-% MAL_lp =  xsim_ox{3}(:,52)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,23) + Vmito*VWater_im* xsim_ox{3}(:,42);
-% MAL_hp =  xsim_ox{4}(:,52)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,23) + Vmito*VWater_im* xsim_ox{4}(:,42);
-% AKG_lp =  xsim_ox{3}(:,48)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,16) + Vmito*VWater_im* xsim_ox{3}(:,43);
-% AKG_hp =  xsim_ox{4}(:,48)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,16) + Vmito*VWater_im* xsim_ox{4}(:,43);
-% SUCC_lp =  xsim_ox{3}(:,49)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,9) + Vmito*VWater_im* xsim_ox{3}(:,44);
-% SUCC_hp =  xsim_ox{4}(:,49)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,9) + Vmito*VWater_im* xsim_ox{4}(:,44);
-% 
-% 
-% figure(40); clf;
-%    
-% axes('position',[0.125 0.575 0.40 0.40]); hold on;
-% plot(tsim_ox{3}, ADP_lp*1e6, 'k', 'linewidth', 2); 
-% plot(tsim_ox{3}, ATP_lp*1e6, 'b', 'linewidth', 2); 
-% plot(tsim_ox{3}, AMP_lp*1e6, 'r', 'linewidth', 2);
-% plot(tm, adp3, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, atp3, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% plot(tm, amp3, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% ylabel('Conc. ($\mu$M)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% text(400,340,'ATP','FontSize',12);
-% text(400,140,'ADP','FontSize',12);
-% text(400,30,'AMP','FontSize',12);
-% axis([100 650 0 400]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]);  hold on;
-% plot(tsim_ox{4}, ADP_hp*1e6, 'k', 'linewidth', 2); 
-% plot(tsim_ox{4}, ATP_hp*1e6, 'b', 'linewidth', 2); 
-% plot(tsim_ox{4}, AMP_hp*1e6, 'r', 'linewidth', 2);
-% plot(tm, adp4, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, atp4, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% plot(tm, amp4, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% % legend('ADP','ATP','AMP')
-% axis([100 650 0 400]); box on 
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on;
-% plot(tsim_ox{3}, PYR_lp*1e6 - 35, 'k', 'linewidth', 2); 
-% plot(tsim_ox{3}, MAL_lp*1e6 - 20, 'b', 'linewidth', 2); 
-% plot(tsim_ox{3}, AKG_lp*1e6, 'r', 'linewidth', 2); 
-% plot(tm, pyr3, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, mal3, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, akg3, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% ylabel('Conc. ($\mu$M)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:600);
-% axis([100 650 0 500]); box on
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on;
-% plot(tsim_ox{4}, PYR_hp*1e6 - 60, 'k', 'linewidth', 2); 
-% plot(tsim_ox{3}, MAL_lp*1e6 - 20, 'b', 'linewidth', 2); 
-% plot(tsim_ox{3}, AKG_lp*1e6, 'r', 'linewidth', 2); 
-% plot(tm, pyr4, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, mal4, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, akg4, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% % legend('pyruvate','malate','ketoglut')
-% text(440,420,'pyruvate','FontSize',12);
-% text(440,220,'malate','FontSize',12);
-% text(440,40,'\alpha-keto.','FontSize',12);
-% 
-% axis([100 650 0 500]); box on
+% total metabolite levels, high and low Pi
+ATP_lp =  xsim_ox{3}(:,27)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,10) + Vmito*VWater_im* xsim_ox{3}(:,35);
+ATP_hp =  xsim_ox{4}(:,27)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,10) + Vmito*VWater_im* xsim_ox{4}(:,35);
+ADP_lp =  xsim_ox{3}(:,28)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,11) + Vmito*VWater_im* xsim_ox{3}(:,37);
+ADP_hp =  xsim_ox{4}(:,28)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,11) + Vmito*VWater_im* xsim_ox{4}(:,37);
+AMP_lp =  xsim_ox{3}(:,68)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,13) ;
+AMP_hp =  xsim_ox{4}(:,68)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,13) ;
+PYR_lp =  xsim_ox{3}(:,46)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,1) + Vmito*VWater_im* xsim_ox{3}(:,38);
+PYR_hp =  xsim_ox{4}(:,46)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,1) + Vmito*VWater_im* xsim_ox{4}(:,38);
+MAL_lp =  xsim_ox{3}(:,52)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,23) + Vmito*VWater_im* xsim_ox{3}(:,42);
+MAL_hp =  xsim_ox{4}(:,52)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,23) + Vmito*VWater_im* xsim_ox{4}(:,42);
+AKG_lp =  xsim_ox{3}(:,48)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,16) + Vmito*VWater_im* xsim_ox{3}(:,43);
+AKG_hp =  xsim_ox{4}(:,48)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,16) + Vmito*VWater_im* xsim_ox{4}(:,43);
+SUCC_lp =  xsim_ox{3}(:,49)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,9) + Vmito*VWater_im* xsim_ox{3}(:,44);
+SUCC_hp =  xsim_ox{4}(:,49)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{4}(:,9) + Vmito*VWater_im* xsim_ox{4}(:,44);
 
-%%
-% figure(42); clf;
-%    
-% axes('position',[0.125 0.575 0.40 0.40]); hold on;
-% plot(tsim_ox{3}, MAL_lp*1e6, 'b', 'linewidth', 2); 
-% plot(tsim_ox{3}, AKG_lp*1e6, 'r', 'linewidth', 2); 
-% plot(tm, mal3, 'bo', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, akg3, 'ro', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% ylabel('Conc. ($\mu$M)','interpreter','latex')
-% set(gca,'xticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% axis([100 650 0 250]); box on
-% 
-% axes('position',[0.550 0.575 0.40 0.40]);  hold on;
-% plot(tsim_ox{4}, MAL_hp*1e6, 'k', 'linewidth', 2); 
-% plot(tsim_ox{4}, AKG_hp*1e6, 'b', 'linewidth', 2); 
-% plot(tm, mal4, 'bo', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% plot(tm, akg4, 'ro', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
-% set(gca,'xticklabel',[]);
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% legend('malate','ketoglutarate')
-% axis([100 650 0 250]); box on 
-% 
-% axes('position',[0.125 0.125 0.40 0.40]); hold on;
-% plot(tsim_ox{3}, SUCC_lp*1e6, 'k', 'linewidth', 2); 
-% plot(tm, succ3, 'ko', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% ylabel('Conc. ($\mu$M)','interpreter','latex')
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'xtick',0:100:600);
-% axis([100 650 0 40]); box on
-% 
-% axes('position',[0.550 0.125 0.40 0.40]); hold on;
-% plot(tsim_ox{4}, SUCC_hp*1e6, 'k', 'linewidth', 2); 
-% plot(tm, succ4, 'ko', 'markersize', 8, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
-% xlabel('$t$ (sec)','interpreter','latex')
-% set(gca,'yticklabel',[]);
-% set(gca,'xtick',0:100:600);
-% legend('succinate')
-% axis([100 650 0 40]); box on
+figure(40); clf;
+   
+axes('position',[0.125 0.575 0.40 0.40]); hold on;
+plot(tsim_ox{3}, ADP_lp*1e6, 'k', 'linewidth', 2); 
+plot(tsim_ox{3}, ATP_lp*1e6, 'b', 'linewidth', 2); 
+plot(tsim_ox{3}, AMP_lp*1e6, 'r', 'linewidth', 2);
+plot(tm, adp3, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, atp3, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+plot(tm, amp3, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+ylabel('Conc. ($\mu$M)','interpreter','latex')
+set(gca,'xticklabel',[]);
+set(gca,'xtick',0:100:600);
+text(400,340,'ATP','FontSize',12);
+text(400,140,'ADP','FontSize',12);
+text(400,30,'AMP','FontSize',12);
+axis([100 650 0 400]); box on
+
+axes('position',[0.550 0.575 0.40 0.40]);  hold on;
+plot(tsim_ox{4}, ADP_hp*1e6, 'k', 'linewidth', 2); 
+plot(tsim_ox{4}, ATP_hp*1e6, 'b', 'linewidth', 2); 
+plot(tsim_ox{4}, AMP_hp*1e6, 'r', 'linewidth', 2);
+plot(tm, adp4, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, atp4, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+plot(tm, amp4, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+set(gca,'xticklabel',[]);
+set(gca,'yticklabel',[]);
+set(gca,'xtick',0:100:600);
+% legend('ADP','ATP','AMP')
+axis([100 650 0 400]); box on 
+
+axes('position',[0.125 0.125 0.40 0.40]); hold on;
+plot(tsim_ox{3}, PYR_lp*1e6 - 35, 'k', 'linewidth', 2); 
+plot(tsim_ox{3}, MAL_lp*1e6 - 20, 'b', 'linewidth', 2); 
+plot(tsim_ox{3}, AKG_lp*1e6, 'r', 'linewidth', 2); 
+plot(tm, pyr3, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, mal3, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, akg3, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+ylabel('Conc. ($\mu$M)','interpreter','latex')
+xlabel('$t$ (sec)','interpreter','latex')
+set(gca,'xtick',0:100:600);
+axis([100 650 0 500]); box on
+
+axes('position',[0.550 0.125 0.40 0.40]); hold on;
+plot(tsim_ox{4}, PYR_hp*1e6 - 60, 'k', 'linewidth', 2); 
+plot(tsim_ox{3}, MAL_lp*1e6 - 20, 'b', 'linewidth', 2); 
+plot(tsim_ox{3}, AKG_lp*1e6, 'r', 'linewidth', 2); 
+plot(tm, pyr4, 'ko', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, mal4, 'bo', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]); 
+plot(tm, akg4, 'ro', 'markersize', 6, 'linewidth',2, 'MarkerFaceColor',[1 1 1]);
+xlabel('$t$ (sec)','interpreter','latex')
+set(gca,'yticklabel',[]);
+set(gca,'xtick',0:100:600);
+% legend('pyruvate','malate','ketoglut')
+text(440,420,'pyruvate','FontSize',12);
+text(440,220,'malate','FontSize',12);
+text(440,40,'\alpha-keto.','FontSize',12);
+
+axis([100 650 0 500]); box on
+
 
