@@ -224,7 +224,7 @@ C   = [0.1862    0.2658    0.3147;
 Y   = [183.2317  167.5529  162.3817;
        183.4706  167.9643  156.2841];
 
-figure(2); clf;
+figure(10); clf;
 
 axes('position',[0.085 0.575 0.40 0.40]); hold on
 plot(J_o2_qs1, Nr_qs1,'linewidth',2,'Color','blue'); 
