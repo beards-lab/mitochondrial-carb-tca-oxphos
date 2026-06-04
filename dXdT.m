@@ -19,7 +19,7 @@
 % [pyruvate_matrix , COAS_matrix , NAD_matrix , CO2tot_matrix , acetylcoA_matrix , NADH_matrix , succinylcoA_matrix , citrate_matrix , succinate_matrix , ATP_matrix , ADP_matrix , oxaloacetate_matrix , AMP_matrix , Pi_matrix , isocitrate_matrix , ketoglutarate_matrix , C_matrix , GDP_matrix , GTP_matrix , coQ_matrix , coQH2_matrix , fumarate_matrix , malate_matrix , aspartate_matrix , glutamate_matrix , ammonia_matrix , ATP_buffer , ADP_buffer , Pi_buffer , H2O2aq_matrix , SOaq_matrix , cytocox_im , cytocred_im , O2aq_matrix , ATP_im , Pi_im , ADP_im , pyruvate_im , glutamate_im , aspartate_im , citrate_im , malate_im , ketoglutarate_im , succinate_im , O2aq_im , pyruvate_buffer , citrate_buffer , ketoglutarate_buffer , succinate_buffer , glutamate_buffer , aspartate_buffer , malate_buffer , O2aq_buffer ]
 %
 
-function [f,J,varargout] = dXdT(~,x,T,BX,K_BX,Pflag,x_ATPase)
+function [f,J] = dXdT(~,x,T,BX,K_BX,Pflag,x_ATPase)
 %% GLOBAL VARIABLES
 % temperature 37
 % ionic_strength 0.17
@@ -508,7 +508,7 @@ Keq_GDH_matrix = exp(-DGro_GDH/RT)/P(3)*P(6)*P(16)/P(25)*P(26)/h_matrix^2;
 %% FLUX EQUATIONS
 
 % % Equations to compute free NADH
-Kn_NADH=0.15689e-3;
+Kn_NADH=0.14007e-3;
 Xcp0_NADH=1.0e-3;
 NADH_free =(NADH_matrix-Kn_NADH-Xcp0_NADH+sqrt((NADH_matrix-Kn_NADH-Xcp0_NADH)^2+4*Kn_NADH*NADH_matrix))/2;
 NAD_free = NAD_matrix;
@@ -537,19 +537,19 @@ a = malate_matrix;
 b = NAD_free;
 p = pyruvate_matrix;
 q = NADH_free;
-KiNADPH = 0.53685e-3;
-Ka = 0.085887e-3;  
-Kb = (0.67226e-3)*(1 + NADPH_matrix/KiNADPH);  
-Kq = (0.32492e-4); % Kmi for NADH
+KiNADPH = 0.50737e-3;
+Ka = 0.092616e-3;  
+Kb = (0.65867e-3)*(1 + NADPH_matrix/KiNADPH);  
+Kq = (0.331364e-4); % Kmi for NADH
 Den = 1 + a/Ka + b/Kb + a*b/(Ka*Kb) + q/Kq; % + o/KdOAA ;
-J_MALIC = (7.368e-05)/(Ka*Kb)*(a*b - p*q/Keq_MALIC)/Den; %/(1 + ATP_matrix/KiATP);
+J_MALIC = (7.4722e-05)/(Ka*Kb)*(a*b - p*q/Keq_MALIC)/Den; %/(1 + ATP_matrix/KiATP);
 
 % oxaloacetate decarboxylase Reaction
 % OAA^2- + H^+ -> PYR^- + CO2
 a = oxaloacetate_matrix;
-Ka = 14.52e-6; % apparent OD Km for OAA
+Ka = 14.966e-6; % apparent OD Km for OAA
 D = 1 + a/Ka ;
-J_OD = (10.0e-04)*a + (4.3305e-05)*(a/Ka)/D; % ??
+J_OD = (10.0e-04)*a + (4.5486e-05)*(a/Ka)/D; % ??
 
 %PDH_matrix
 a=pyruvate_matrix;
@@ -563,19 +563,19 @@ r = NADH_free;
 %KmandKivalues[M_matrix]
 KmA=38.3e-6;
 KmB=9.9e-6;
-KmC=0.91132e-3; 
+KmC=0.77651e-3; 
 KiACCOA=40.2e-6;
-KiNADH = 0.13441e-3; % 
+KiNADH = 0.088533e-3; % 
 
-Vmf_PDH=3.4547e-3;
+Vmf_PDH=3.4741e-3;
 Vmf_PDH=Vmf_PDH*PDH_activity;
 
 % Kinetic PDH regulation
-tau_PDH = 87.782;
-Knadh = 0.48422e-3;
-Katp  = 0.96417e-3;
+tau_PDH = 109.17;
+Knadh = 0.46152e-3;
+Katp  = 0.89625e-3;
 alpha_aa = 1/(1 + NADH_matrix/Knadh )/tau_PDH;
-beta_aa  = 1.614/(1 + Knadh/NADH_matrix )/(1 + Katp/ATP_matrix)/tau_PDH;
+beta_aa  = 1.7784/(1 + Knadh/NADH_matrix )/(1 + Katp/ATP_matrix)/tau_PDH;
 f(65,:) = alpha_aa*(1-PDH_activity) - beta_aa*PDH_activity;
 
 %Inhibition constants
@@ -614,7 +614,7 @@ uAMP=AMP_matrix/P(13);
 % inhibition factor
 I2 = 1 + uATP/KiATP + uADP/KiADP + uAMP/KiAMP + succinylcoA_matrix/KiSCOA;
 
-Vmf_CTS = 0.16756;
+Vmf_CTS = 0.17178;
 n = Vmf_CTS*(a*b - p*q/Keq_CTS_matrix)/(KeA*KmB);
 d = (1 + KmA*b/(KeA*KmB) + KmQ*p/(KeQ*KmP)) + ...
     (a/KeA + KmQ*a*p/(KeA*KmP*KeQ) + KmA*p*q/(KeA^2*KmB*Keq_CTS_matrix))*I2 + ...
@@ -684,7 +684,7 @@ KmA   = 0.273e-3; %
 KmB   = 6.96e-6;
 KmC   = 98.6e-6;
 Kia   = 75.9e-3;
-Kir   = 2.4e-6;  % 1/1000 value from paper!
+Kir   = 1.5e-6;  % reduced from Qi et al. paper for low Ca
 Kic   = 0.112e-3;
 Kiq   = 0.218e-3; 
 KaH   = 10^(-6.11);
@@ -697,7 +697,7 @@ aATP  = 6.694;
 aADP  = 0.173;
 aMg   = 1;
 bMg   = 4.222;
-Vmf_AKGDH=2.8437e-3;
+Vmf_AKGDH=3.5375e-3;
 
 den_alpha_A=(1+Ca/(aCa*KaCa)+(Ca/(aCa*KaCa))^2)*...
   (1+ATP_matrix/(aATP*KiATP))*(1+ADP_matrix/(aADP*KaADP))*...
@@ -767,7 +767,7 @@ Kic =(km3*r5)/(k3*r3);
 Kip =(k4*r5)/(km4*r4);
 Kiq =k5/km5;
 Kir =(k6*r4)/km6;
-Vmf=6.2297e-3;
+Vmf=7.2835e-3;
 Vmr=Vmf/Keq_SCS_matrix*KmP*Kiq*Kir/(Kia*Kib*KmC);
 J_SCS_matrix = (Vmf*Vmr*a*b*c - Vmf*Vmr*(p*q*r/Keq_SCS_matrix)) ...
   /(Vmr*Kia*Kib*KmC*(1+a*q/Kia/KIQ)+Vmr*Kib*KmC*a+Vmr*Kia*KmB*c*(1+a*q/Kia/KIQ) ...
@@ -1140,7 +1140,7 @@ E4= 1 -(E0+E1+E2+E3);
 
 % Compute steady-state rates
 
-Vmf_SDH=0.093131e-3 ;
+Vmf_SDH=0.083282e-3 ;
 
 % succinate oxidation rate
 J_SUCC = Vmf_SDH*(k02_SUC_FAD*E0 + k13_SUC_FAD*E1 + k24_SUC_FAD*E2 ...
@@ -1175,7 +1175,7 @@ K14m = 0;
 K25 = gamma2/gamma3*1.8077e-10;
 K26 = gamma2/gamma3*8.2785e-08;
 K14f = (7.6946e-09)/gamma1;
-K_aPI = 0.79227e-03; % 1/26 E(g2) = 11.07
+K_aPI =0.9693e-03; % 1/26 E(g2) = 11.07
 K_aF = 0.0315;
 Kip1m = gamma3/gamma1*0.0460;
 Kip4 = gamma2*0.0417;
@@ -1190,18 +1190,14 @@ k64 = Keq*K26*k46*k54/(k45*K25);
 k12f = k45*K25*k21f/(K14f*k54);
 
 % 6 state-model with H binding
-E0_FUM=0.15859e-3;
-R = (mal*k46  + fum*(k45 + k12f*K14f/H))/...
-    (k64*H/K26 + k54*H/K25 + k21f);
+E0_FUM=0.18065e-3;
+R = (mal*k46  + fum*(k45 + k12f*K14f/H))/(k64*H/K26 + k54*H/K25 + k21f);
 E4 = E0_FUM / (K14m/H*(1 + p/Kip1m) + K14f/H*(1 + fum/Kif1f + phos/Kip1f) + ...
     R + (1 + fum/Kif4 + phos/Kip4) + R*H/K25 + R*H/K26 );
 E2 = R*E4;
 E6 = H/K26*E2;
 J_FUM_matrix = ( phos/K_aPI  + fum/K_aF )/(1 + phos/K_aPI  + fum/K_aF )*...
      (k64*E6 - k46*mal*E4 );
-% J_FUM_matrix = ( phos/K_aPI )/(1 + phos/K_aPI )*...
-%      (k64*E6 - k46*mal*E4 );
-% J_FUM_matrix = (k64*E6 - k46*mal*E4 );  % DAB simplified
 
 % MDH_matrix--DAB version
 a = NAD_free;
@@ -1212,7 +1208,7 @@ AA=1.10708-(1.54508e-3)*(T+273.15)+(5.95584e-6)*(T+273.15).^2;
 BB=1.6;
 gamma1=exp(-AA*1*sqrt(I)/(1+BB*sqrt(I)));
 gamma2=exp(-AA*4*sqrt(I)/(1+BB*sqrt(I)));
-Vmf_MDH=0.051969;
+Vmf_MDH=0.025623;
 k1p=5.80E+04*1e3/60;
 %unitsconvertedtoM^-1s^-1
 km1p=5.36E+05/60;
@@ -1307,7 +1303,7 @@ else
 end
 
 %F1F0ATPASE:im_to_matrix
-k1_F1F0 = 0.38883e-3;
+k1_F1F0 = 0.41385e-3;
 dG0 = -4.67;
 nH = 8/3;
 Keq_F1F0ATPASE = exp(-(dG0 - nH*F*DPsi_im_to_matrix)/RT)*(h_im^nH/h_matrix^(nH-1))*P(10)/P(11)/P(14);
@@ -1322,7 +1318,7 @@ Kb = 2.0e-3;
 J_F1F0ATPASE_im_to_matrix = (k1_F1F0/(Ka*Kb))*(Keq_F1F0ATPASE*a*b - p)/(1 + a/Ka + b/Kb + a*b/(Ka*Kb) );
 
 %ETC1:im_to_matrix
-ETC1Activity = 0.22909e-3 ;
+ETC1Activity = 0.28128e-3 ;
 % NADH_free = NADH_free;
 % beta_n=1;
 Hp = h_im;
@@ -1661,7 +1657,7 @@ JH2O2 = ETC1Activity*(S2*(kfH2O2_20 - krH2O2_42) + S3*kfH2O2_31 + S4*kfH2O2_42 -
 J_ETC1_im_to_matrix = JNADH;
 
 %ETC3:im_to_matrix
-ETC3_activity = 0.63896e-3;
+ETC3_activity = 0.69186e-3;
 dPsi = DPsi_im_to_matrix;
 Hp = h_im;
 Hn = h_matrix;
@@ -1887,7 +1883,7 @@ J_ETC3_im_to_matrix = (2*JQH2 - JSO3);
 
 %ETC4:im_to_matrix
 Keq_ETC4 = exp(-DGro_ETC4/RT)*exp( -(4*F*DPsi_im_to_matrix)/RT)*P(32)^2/P(33)^2/P(34)^0.5*h_matrix^4/h_im^2;
-ETC4_activity = 3.75e-3 ;     
+ETC4_activity = 3.5e-3 ;     
 c3 = cytocox_im;
 c2 = cytocred_im;
 O2 = O2aq_matrix;
@@ -1903,7 +1899,7 @@ if O2 <= 1e-12 || c2 < 1e-9
 end
 
 % GHK H LEAK 
-x_HLE = HLE*4872.9 ;
+x_HLE = HLE*5032.3 ;
 FRT = DPsi_im_to_matrix*F/RT;
 if abs(FRT) > 0.01
   J_HLEAK_im_to_matrix = x_HLE*FRT*(h_im*exp(FRT) - h_matrix)/(exp(FRT)-1);
@@ -1921,7 +1917,7 @@ else
 end
 
 %KH:im_to_matrix
-k1_KH = 1.2458e+06;
+k1_KH = 2.5e+06;
 J_KH_im_to_matrix = k1_KH*(k_im*h_matrix - k_matrix*h_im);
 
 %NH4/H:im_to_matri NH3 transport
@@ -1941,15 +1937,14 @@ p1h1 = p1*h1;
 p2h2 = p2*h2;
 d1 = 1  + p1 + h1 + p1h1;
 d2 = 1 +  p2 + h2 + p2h2 ;
-x_PIH = 0.35308 ; 
+x_PIH = 0.3125 ; 
 gamma = 1; % 7/25
 beta  = 1;
 alpha = Kp2*Kh2/(Kp1*Kh1)/gamma;
-R = (p1h1 + alpha*beta)/(gamma + alpha*p2h2);
-J_PIH_im_to_matrix = x_PIH*(p1h1 - alpha*beta*p2h2 )/( (d1+R*d2)*(gamma+alpha*p2*h2) );
+J_PIH_im_to_matrix = x_PIH*(p1h1 - alpha*beta*p2h2 )/( d1*(gamma + alpha*p2*h2) + d2*(gamma*beta + p1*h1) );
 
 %ANT:im_to_matrix
-x_ANT = 0.53977;
+x_ANT = 0.40996;
 ADP_i1 = ADP_im/P(37);
 % ADP^3-;
 ATP_i1 = ATP_im/P(35);
@@ -1984,7 +1979,7 @@ J_ANT_im_to_matrix = x_ANT*num/den;
 
 %PYRH:im_to_matrix DAB ORDERED Bi-Bi
 % based on Vinnakota & Beard DOI: 10.1016/j.bpj.2010.11.079 
-x_PYRH = 0.052365;
+x_PYRH = 0.043528;
 Kpyr = 7.1631e-05; % 1/26
 Khyd   = 10^(-7.0); % 
 gamma_pyr = 2.3;
@@ -1995,18 +1990,51 @@ b2 = h_im/Khyd;
 den = (a1*b1 + gamma_pyr)*(1 + b2 + a2*b2) + (a2*b2 + gamma_pyr)*(1 + b1 + a1*b1);
 J_PYRH_im_to_matrix = x_PYRH*(a2*b2 - a1*b1) / den;
 
-%AAT_matrix--Saito et al. model https://doi.org/10.1113/JP272598
+% %AAT_matrix--Saito et al. model https://doi.org/10.1113/JP272598
+% a=aspartate_matrix;
+% b=ketoglutarate_matrix;
+% p=oxaloacetate_matrix;
+% q=glutamate_matrix;
+% KmA = 1.58*1e-3;
+% KmB = 0.149*1e-3;
+% KmP = 0.0399*1e-3;
+% KmQ = 2.5*1e-3;
+% Kia = 2.0*1e-3;
+% Kiq = 1.83*1e-3;
+% % Vmf_GOT=0.018126;
+% Vmf_GOT=1.0; % This is Jana's value
+% if(a>MinCon)&&(b>MinCon)
+%   ab=a*b;
+% else
+%   ab=0;
+% end
+% if(p>MinCon)&&(q>MinCon)
+%   pq=p*q;
+% else
+%   pq=0;
+% end
+% alpha = 0.30/0.58; % KcF/KcR
+% J_AAT_matrix = Vmf_GOT*(ab-pq/Keq_AAT_matrix) / ( KmB*a + KmA*b + ab + ...
+%     alpha*(KmQ*p + KmP*q + pq + KmQ*a*p/Kia)/(Keq_AAT_matrix) + KmA*b*q/Kiq );
+
+%AAT_matrix--Fan Wu model implemented by Santosh
 a=aspartate_matrix;
 b=ketoglutarate_matrix;
 p=oxaloacetate_matrix;
 q=glutamate_matrix;
-KmA = 1.58*1e-3;
-KmB = 0.149*1e-3;
-KmP = 0.0399*1e-3;
-KmQ = 2.5*1e-3;
-Kia = 2.0*1e-3;
-Kiq = 1.83*1e-3;
-Vmf_GOT=0.018126;
+KmA=3900e-6;
+KmB=430e-6;
+KmP=88e-6;
+KmQ=8900e-6;
+Kia=3480e-6;
+% Kib=710e-6;
+Kip=50e-6;
+Kiq=8400e-6;
+KiAKG=16.6e-3;
+ai=1+b/KiAKG;
+Vmf_GOT=0.12935;
+Vmr=Vmf_GOT/Keq_AAT_matrix*(KmQ*Kip/Kia/KmB);
+
 if(a>MinCon)&&(b>MinCon)
   ab=a*b;
 else
@@ -2017,48 +2045,37 @@ if(p>MinCon)&&(q>MinCon)
 else
   pq=0;
 end
-alpha = 0.30/0.58; % KcF/KcR
-J_AAT_matrix = Vmf_GOT*(ab-pq/Keq_AAT_matrix) / ( KmB*a + KmA*b + ab + ...
-    alpha*(KmQ*p + KmP*q + pq + KmQ*a*p/Kia)/(Keq_AAT_matrix) + KmA*b*q/Kiq );
+J_AAT_matrix=Vmf_GOT*Vmr*(ab-pq/Keq_AAT_matrix)/ (Vmr*KmB*a+Vmr*KmA*ai*b+Vmf_GOT*KmQ/Keq_AAT_matrix*ai*p+Vmf_GOT*KmP/Keq_AAT_matrix*q+Vmr*a*b+Vmf_GOT*KmQ/Kia/Keq_AAT_matrix*a*p+Vmf_GOT/Keq_AAT_matrix*p*q+Vmr*KmA/Kiq*b*q);
 
-% % GDH1_matrix
-% a = glutamate_matrix;
-% b = NAD_matrix;
-% r = NADH_free;
-% p = ketoglutarate_matrix;
-% q = 0*ammonia_matrix; % DAB: assume no ammonia build up
-% KmA=3.5e-3;
-% KmB=80e-6;
-% KmP=1.1e-3;
-% KmR=40e-6;
-% KiA=3.5e-3;
-% KiB=1e-3;
-% KiP=0.25e-3;
-% KmQ=6e-3;
-% KiQ=6e-3;
-% KiR=4e-6;
-% % Keq_GDH_matrix=3e-6;
-% Vmf_GDH1 = 0.05 ;
-% Den=KiB*KmA+KmA*b+KmB*a+a*b+a*b*q/KiP+KiB*KmA*r/KiR+...
-% KmA*b*q/KiQ+KiB*KmA*KmR*p*q/KmQ/KiP/KiR+KmB*a*r/KiR+a*b*p*q/KiP/KiQ+...
-% KiB*KmA*KmP*q*r/KmQ/KiP/KiR+KiB*KmA*KmP*p*q*r/KmQ/KiP/KiR+a*b*p/KiP+...
-% KiB*KmA*KmP*q/KmQ/KiP+KiB*KmA*a*p*r/KiA/KiP/KiR+KiB*KmA*p*r/KiP/KiR+...
-% KmR*KmA*p*q*b/KmQ/KiP/KiR+KiB*KmA*a*p*q*r/KmQ/KiA/KiP/KiR;
-% J_GDH1_matrix = Vmf_GDH1*(a*b-p*q*r/Keq_GDH_matrix)/Den;
-% % J_GDH1_matrix = 0;
-
-% simple irreversible GDH model 
-a=glutamate_matrix;
-b=NAD_matrix;
-KmA = 3.5e-3;
-KmB = 1.0e-3;
-Vmf_GDH = 0.8924e-3;
-J_GDH1_matrix = Vmf_GDH*(a*b)/((KmB + b)*(KmA + a));
+% GDH1_matrix
+a = glutamate_matrix;
+b = NAD_matrix;
+r = NADH_free;
+p = ketoglutarate_matrix;
+q = 0*ammonia_matrix; % DAB: assume no ammonia build up
+KmA=3.5e-3;
+KmB=80e-6;
+KmP=1.1e-3;
+KmR=40e-6;
+KiA=3.5e-3;
+KiB=1e-3;
+KiP=0.25e-3;
+KmQ=6e-3;
+KiQ=6e-3;
+KiR=4e-6;
+% Keq_GDH_matrix=3e-6;
+Vmf_GDH1 = 1.1101 ;
+Den=KiB*KmA+KmA*b+KmB*a+a*b+a*b*q/KiP+KiB*KmA*r/KiR+...
+KmA*b*q/KiQ+KiB*KmA*KmR*p*q/KmQ/KiP/KiR+KmB*a*r/KiR+a*b*p*q/KiP/KiQ+...
+KiB*KmA*KmP*q*r/KmQ/KiP/KiR+KiB*KmA*KmP*p*q*r/KmQ/KiP/KiR+a*b*p/KiP+...
+KiB*KmA*KmP*q/KmQ/KiP+KiB*KmA*a*p*r/KiA/KiP/KiR+KiB*KmA*p*r/KiP/KiR+...
+KmR*KmA*p*q*b/KmQ/KiP/KiR+KiB*KmA*a*p*q*r/KmQ/KiA/KiP/KiR;
+J_GDH1_matrix = Vmf_GDH1*(a*b-p*q*r/Keq_GDH_matrix)/Den;
 
 % ASPGLU
 Keq_ASPGLU = exp( +(1*F*DPsi_im_to_matrix)/RT)/P(24)*P(25)/P(39)*P(40);
-Kg1 = 0.96899e-3; % glutamate (outside) affinity
-Ka1 = 0.70257e-3; % aspartate (outside) affinity
+Kg1 = 1.033e-3; % glutamate (outside) affinity
+Ka1 = 0.70735e-3; % aspartate (outside) affinity
 Kg2 = 0.77793e-3; % glutamate (inside) affinity
 Ka2 = Kg2*Ka1/Kg1; % thermo constraint
 g1 = glutamate_im*h_im/Kh(39)/P(39)/Kg1;
@@ -2067,11 +2084,11 @@ a1 = aspartate_im/P(40)/Ka1;
 a2 = aspartate_matrix/P(24)/Ka2;
 d1 = 1 + g1 + a1;
 d2 = 1 + g2 + a2;
-x_ASPGLU = 9.1744e-05;
+x_ASPGLU = 0.085807;
 J_ASPGLU_im_to_matrix = x_ASPGLU*(g1*a2*Keq_ASPGLU - g2*a1 )/( d1*(g2+a2) + d2*(g1 + a1) );
 
 %GLUH:im_to_matrix
-x_GLUH = 1.9213e+06;
+x_GLUH = 1.1211e+06;
 glutamate1 = glutamate_matrix/P(25);
 glutamate2 = glutamate_im/P(39);
 J_GLUH_im_to_matrix = x_GLUH * (glutamate2*h_im - glutamate1*h_matrix);
@@ -2080,7 +2097,6 @@ J_GLUH_im_to_matrix = x_GLUH * (glutamate2*h_im - glutamate1*h_matrix);
 J_CITMAL_im_to_matrix = 0;
 
 % AKGMAL:im_to_matrix
-alpha = 1.0;
 Km1 = 1.0e-3; % malate (outside) affinity
 Ka1 = 1.0e-3; % akg (outside) affinity
 Km2 = alpha*Km1; % thermo constraint
@@ -2091,19 +2107,19 @@ a1 = ketoglutarate_im/P(43)/Ka1;
 a2 = ketoglutarate_matrix/P(16)/Ka2;
 d1 = 1 + m1 + a1;
 d2 = 1 + m2 + a2;
-x_AKGMAL = 0.012277;
+x_AKGMAL = 0.012566;
 J_AKGMAL_im_to_matrix = -x_AKGMAL*(m1*a2 - m2*a1 )/( d1*(m2+a2) + d2*(m1 + a1) );
-   
+  
 % Dicarboxylate transporter DAB August 2025
 alpha = 1;
-Km1 = 4.1005e-3; % im malate affinity (adjustable)
-Ks1 = 3.1141e-3; % im succinate affinity (adjustable)
-Kp1 = 6.2395e-3; % im Pi affinity (adjustable)
+Km1 = 4.1259e-3; % im malate affinity (adjustable)
+Ks1 = 2.9117e-3; % im succinate affinity (adjustable)
+Kp1 = 6.2518e-3; % im Pi affinity (adjustable)
 Kp2 = alpha*Kp1;  % thermo constraint
 Ks2 = alpha*Ks1;  % thermo constraint
 Km2 = alpha*Km1; % thermo constraint
-Ko2 = 1.2665e-6; % g1
-Kf2 = 1.3028e-3; % 
+Ko2 = 1.3028e-6; % g1
+Kf2 = 1.4073e-3; % 
 
 m1 = malate_im/P(42)/Km1;
 m2 = malate_matrix/P(23)/Km2;
@@ -2112,16 +2128,15 @@ p2 = Pi_matrix/P(14)/Kp2;
 s1 = succinate_im/P(44)/Ks1;
 s2 = succinate_matrix/P(9)/Ks2;
 o2 = oxaloacetate_matrix/P(12)/Ko2;
-d1 = 1 + s1 + m1 + p1;  
 f2 = fumarate_matrix/P(22)/Kf2;
+d1 = 1 + s1 + m1 + p1;  
 d2 = 1 + s2 + m2 + p2 + o2 + f2;
-r = (p1 + m1 + s1)/(p2 + m2 + s2)/alpha;
-D = (d1 + r*d2);
+D = alpha*d1*(s2 + m2 + p2) + d2*(s1 + m1 + p1);
 
-x_DICARBOX = 9.5214e-3;
-J_DICARBPI_im_to_matrix  = x_DICARBOX*(p1-alpha*r*p2)/D;
-J_DICARBMAL_im_to_matrix = x_DICARBOX*(m1-alpha*r*m2)/D;
-J_DICARBSUC_im_to_matrix = x_DICARBOX*(s1-alpha*r*s2)/D;
+x_DICARBOX = 9.0673e-3;
+J_DICARBPI_im_to_matrix  = x_DICARBOX*alpha*(p1*m2 + p1*s2 - p2*m1 - p2*s1)/D;
+J_DICARBMAL_im_to_matrix = x_DICARBOX*alpha*(m1*s2 + m1*p2 - m2*s1 - m2*p1)/D;
+J_DICARBSUC_im_to_matrix = x_DICARBOX*alpha*(s1*m2 + s1*p2 - s2*m1 - s2*p1)/D;
 J_DICARBOAA_im_to_matrix = 0;
 
 %O2PERM:im_to_matrix
@@ -2137,7 +2152,7 @@ J_ATPPERM_buffer_to_im = x_ATPPERM * (ATP_buffer - ATP_im);
 x_PIPERM = 400;
 J_PIPERM_buffer_to_im = x_PIPERM * (Pi_buffer - Pi_im);
 %HPERM:buffer_to_im
-x_HPERM = 400;
+x_HPERM = 1e8;
 J_HPERM_buffer_to_im = x_HPERM * (h_buffer - h_im);
 %KPERM:buffer_to_im
 x_KPERM = 400;
@@ -2247,7 +2262,7 @@ f(68,:) = ( + J_AK_buffer) / VWater_buffer; % AMP_buffer
 Q0 = 0.25*Qtot;
 Q1 = 0.25*Qtot;
 tau_HLE1 = 5;
-tau_HLE2 = 225;
+tau_HLE2 = 225.58;
 HLE_inf = 0.5*(1 + tanh((coQH2_matrix - Q0)/Q1) );
 if HLE_inf > HLE 
   f(69,:) = ( HLE_inf - HLE ) / tau_HLE1 ;
