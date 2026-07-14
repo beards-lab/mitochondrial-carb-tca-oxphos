@@ -2,19 +2,15 @@
 
 % Set temperature
 T = 37;
-% Set proton cytoplasm sizes
+% Set proton buffer sizes
 BX(1) = 0.10;       % matrix
-BX(2) = 100;     % cytoplasm
+BX(2) = 100;     % buffer
 BX(3) = 100;     % intermembrane space DAB
-% Proton cytoplasm binding constant(s)
+% Proton buffer binding constant(s)
 K_BX(1) = 1e-7; % DAB
 K_BX(2) = 10^(-7.2);
 K_BX(3) = 10^(-7.2);
-% % Setting physical parameters for computing the graphs
-% W_m = 0.664*1.09;   % mitochondrial water space (ml water per ml mito) [VB2002]
-% W_x = 0.7*W_m;      % Matrix water space, (l mito water) (l mito)^{-1}
-% W_i = 0.3*W_m;      % IM water space, (l IM water) (l mito)^{-1}
-% W_c = 1/((4*0.21e-3)/1.09);           % buffer, (l buffer water) (l mito)^{-1}
+% Setting physical parameters for computing the graphs
 rho_m = 3.6697e-6;  % (l mito) (mg protein)^{-1}
 VRegion_matrix = 0.001; % [=] l mito (l cuvette)^{-1} 
 
@@ -49,8 +45,8 @@ x0(16) = 1e-9;          % oxoglutarate
 x0(17) = 30e-9;         % Ca matrix
 x0(18) = 2e-3 - 1e-9;   % GDP, matrix
 x0(19) = 1e-9;          % GTP, matrix
-x0(20) = 1e-9;          % CoQ, oxidised
-x0(21) = Qtot - 1e-9;   % CoQ, reduced
+x0(20) = Qtot - 1e-9;   % CoQ, oxidised
+x0(21) = 1e-9;          % CoQ, reduced
 x0(22) = 1e-9;          % fumarate, matrix
 x0(23) = 1e-9;          % malate, matrix
 x0(24) = 1e-9;          % aspartate, matrix
@@ -61,7 +57,7 @@ x0(31) = 1e-12;         % mito SO
 x0(34) = 0.19e-3;       % O2, matrix     
 x0(54) = 10^-(7.4);     % H, matrix
 x0(55) = 1.2e-3;        % Mg, matrix
-x0(56) = 0.070;         % K, matrix
+x0(56) = 0.050;         % K, matrix
 
 % IM VARIABLES
 x0(32) = Ctot - 1e-12;  % cytochrome c, ox
@@ -82,28 +78,28 @@ x0(61) = 1.0e-9;        % Mg, IM
 x0(62) = 0.130;         % K, IM
 
 % CYTOPLASM VARIABLES
-x0(27) = 1e-12;         % ADP, cytoplasm
-x0(28) = 1e-12;         % ATP, cytoplasm
-x0(29) = 1e-12;         % Pi, cytoplasm
-x0(46) =  1e-12;        % pyruvate, cytoplasm
-x0(47) =  1e-12;        % citrate, cytoplasm
-x0(48) =  1e-12;        % oxoglutarate, cytoplasm
-x0(49) =  1e-12;        % succinate, cytoplasm
-x0(50) =  1e-12;        % glutamate, cytoplasm
-x0(51) =  1e-12;        % aspartate, cytoplasm
-x0(52) =  1e-12;        % malate, cytoplasm
-x0(53) =  0.19e-3;      % O2, cytoplasm
+x0(27) = 1e-12;         % ADP, buffer
+x0(28) = 1e-12;         % ATP, buffer
+x0(29) = 1e-12;         % Pi, buffer
+x0(46) =  1e-12;        % pyruvate, buffer
+x0(47) =  1e-12;        % citrate, buffer
+x0(48) =  1e-12;        % oxoglutarate, buffer
+x0(49) =  1e-12;        % succinate, buffer
+x0(50) =  1e-12;        % glutamate, buffer
+x0(51) =  1e-12;        % aspartate, buffer
+x0(52) =  1e-12;        % malate, buffer
+x0(53) =  0.19e-3;      % O2, buffer
 x0(57) = 10^-(7.2);     % H, buffer
 x0(58) = 1.0e-9;        % Mg, buffer
 x0(59) = 0.130;         % K, buffer
 
 % OTHER VARIABLES
 x0(63) = 0; % DPsi_im_to_matrix
-x0(64) = 0; % DPsi_cytoplasm_to_im
+x0(64) = 0; % DPsi_buffer_to_im
 x0(65) = 1.0; % initial PDH activity
 x0(66) = NADPtot; % initial NADP_matrix
 x0(67) = 0; % initial NADPH_matrix
-x0(68) = 0; % initial AMP_cytoplasm
+x0(68) = 0; % initial AMP_buffer
 x0(69) = 0; % K+ leak activity 
 
 %%
@@ -115,27 +111,31 @@ options2 = odeset('MaxStep', 1);
 %% Run quasi-steady simulations to compare to data of Bazil et al. (2016)
 
 % low Pi (1.0 mM) run
-for i = 1:28
+for i = 1:56
     i
   x_ATPase = 0;       % ATPase
   Pflag = 0;
   Kflag = 2;
   % State 1 simulation
   xsim0 = x0;
-  xsim0(29) = 1.0e-3 ; % setting Pi, cytoplasm 
+  xsim0(29) = 1.0e-3 ; % setting Pi, buffer 
   [tsim1,xsim1] = ode15s(@dXdT, [-60 0], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase ); 
   
-  % State 3 simulation
+  % State 2 simulation (brief)
   xsim0 = xsim1(end,:);
-  x_ATPase = (i-1)*1.0e-6;       % ATPase
-  xsim0(46) = 2.5e-3 ; % setting pyruvate, cytoplasm 
-  xsim0(52) = 0.5e-3 ; % setting malate, cytoplasm 
+  xsim0(46) = 2.5e-3 ; % setting pyruvate, buffer 
+  xsim0(52) = 0.5e-3 ; % setting malate, buffer 
   xsim0(27) = 5.0e-3 ; % setting ATP_c 
+  [tsim2,xsim2] = ode15s(@dXdT, [0 60], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );    
 
-  [tsim3,xsim3] = ode15s(@dXdT, [0 150], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );    
+  % State 3 simulation (add apyrase enzyme)
+  xsim0 = xsim2(end,:);
+  x_ATPase = (i-1)*0.6e-6;       % ATPase
+
+  [tsim3,xsim3] = ode15s(@dXdT, [60 150], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );    
    
-  tsim_qs{i} = [tsim1; tsim3(2:end); ];
-  xsim_qs{i} = [xsim1; xsim3(2:end,:); ];
+  tsim_qs{i} = [tsim1; tsim2(2:end); tsim3(2:end); ];
+  xsim_qs{i} = [xsim1; xsim2(2:end,:); xsim3(2:end,:); ];
 
   NAD  = xsim_qs{i}(end,3);
   NADH = max(1e-12,NADtot - NAD);
@@ -149,42 +149,44 @@ end
 
 Vmito = 0.001; % [=] l mito (l cuvette)^{-1} 
 clear J_ETC4_im_to_matrix
-clear J_ROS
 % computing fluxes
-for i = 1:28
-  x_ATPase = (i-1)*1.0e-6; 
+for i = 1:56
+  x_ATPase = (i-1)*0.6e-6; 
   for ii = 1:length(tsim_qs{i})
     [fco,Jco] = dXdT(0,xsim_qs{i}(ii,:)', T,BX,K_BX,Pflag, x_ATPase );
     J_ETC4_im_to_matrix{i}(ii) = Jco(17)/2; % J_O2 in mol / sec / L mito
-    J_ROS{i}(ii) = Jco(44);
   end
   % Accounting for electrode response time
-  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_qs{i}, 0, options2, tsim_qs{i}, J_ETC4_im_to_matrix{i}+0*J_ROS{i} );  
+  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_qs{i}, 0, options2, tsim_qs{i}, J_ETC4_im_to_matrix{i} );  
   J_o2_qs1(i) =  J_electrode(end)*60/674*(1e9)*Vmito;
 end
 
 % high Pi (5.0 mM) run
-for i = 1:28
+for i = 1:56
     i
   x_ATPase = 0;       % ATPase
   Pflag = 0;
   Kflag = 2;
   % State 1 simulation
   xsim0 = x0;
-  xsim0(29) = 5.0e-3 ; % setting Pi, cytoplasm 
+  xsim0(29) = 5.0e-3 ; % setting Pi, buffer 
   [tsim1,xsim1] = ode15s(@dXdT, [-60 0], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase ); 
   
-  % State 3 simulation
+  % State 2 simulation (brief)
   xsim0 = xsim1(end,:);
-  x_ATPase = (i-1)*1.0e-6;       % ATPase
-  xsim0(46) = 2.5e-3 ; % setting pyruvate, cytoplasm 
-  xsim0(52) = 0.5e-3 ; % setting malate, cytoplasm 
+  xsim0(46) = 2.5e-3 ; % setting pyruvate, buffer 
+  xsim0(52) = 0.5e-3 ; % setting malate, buffer 
   xsim0(27) = 5.0e-3 ; % setting ATP_c 
-  [tsim3,xsim3] = ode15s(@dXdT, [0 150], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );  
+  [tsim2,xsim2] = ode15s(@dXdT, [0 60], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );    
 
-  tsim_qs{i} = [tsim1; tsim3(2:end); ];
-  xsim_qs{i} = [xsim1; xsim3(2:end,:); ];
+  % State 3 simulation (add apyrase enzyme)
+  xsim0 = xsim2(end,:);
+  x_ATPase = (i-1)*0.60e-6;       % ATPase
 
+  [tsim3,xsim3] = ode15s(@dXdT, [60 150], xsim0, options1,  T, BX, K_BX, Pflag, x_ATPase );    
+   
+  tsim_qs{i} = [tsim1; tsim2(2:end); tsim3(2:end); ];
+  xsim_qs{i} = [xsim1; xsim2(2:end,:); xsim3(2:end,:); ];
   NAD  = xsim_qs{i}(end,3);
   NADH = max(1e-12,NADtot - NAD);
   NADPH = xsim_qs{i}(end,67)';
@@ -197,17 +199,15 @@ end
 
 Vmito = 0.001; % [=] l mito (l cuvette)^{-1} 
 clear J_ETC4_im_to_matrix
-clear J_ROS
 % computing fluxes
-for i = 1:28
-  x_ATPase = (i-1)*1.0e-6; 
+for i = 1:56
+  x_ATPase = (i-1)*0.60e-6; 
   for ii = 1:length(tsim_qs{i})
     [fco,Jco] = dXdT(0,xsim_qs{i}(ii,:)', T,BX,K_BX,Pflag, x_ATPase );
     J_ETC4_im_to_matrix{i}(ii) = Jco(17)/2; % J_O2 in mol / sec / L mito
-    J_ROS{i}(ii) = Jco(44);
   end
   % Accounting for electrode response time
-  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_qs{i}, 0, options2, tsim_qs{i}, J_ETC4_im_to_matrix{i}+0*J_ROS{i} );  
+  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_qs{i}, 0, options2, tsim_qs{i}, J_ETC4_im_to_matrix{i} );  
   J_o2_qs5(i) =  J_electrode(end)*60/674*(1e9)*Vmito;
 end
 
@@ -229,8 +229,8 @@ figure(10); clf;
 axes('position',[0.085 0.575 0.40 0.40]); hold on
 plot(J_o2_qs1, Nr_qs1,'linewidth',2,'Color','blue'); 
 plot(J_o2_qs5, Nr_qs5,'linewidth',2,'Color','red'); 
-plot(JO2(1,:)*600,N(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
-plot(JO2(2,:)*600,N(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(1,:)*580,N(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(2,:)*580,N(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
 ylabel('NAD(P)H (normalized)','interpreter','latex')
 axis([0 100 0 1]); box on
 set(gca,'xticklabel',[]);
@@ -238,8 +238,8 @@ set(gca,'xticklabel',[]);
 axes('position',[0.575 0.575 0.40 0.40]); hold on
 plot(J_o2_qs1, dPsi_qs1,'linewidth',2,'Color','blue'); 
 plot(J_o2_qs5, dPsi_qs5,'linewidth',2,'Color','red'); 
-plot(JO2(1,[1 2 5])*600,Y(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
-plot(JO2(2,[1 2 5])*600,Y(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(1,[1 2 5])*580,Y(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(2,[1 2 5])*580,Y(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
 ylabel('$\Delta\Psi$ (mV)','interpreter','latex')
 axis([0 100 150 200]); box on
 set(gca,'xticklabel',[]);
@@ -248,8 +248,8 @@ legend('[Pi]_e = 1 mM', '[Pi]_e = 5 mM','Fontsize',10)
 axes('position',[0.085 0.125 0.40 0.40]); hold on
 plot(J_o2_qs1, cytC_qs1,'linewidth',2,'Color','blue'); 
 plot(J_o2_qs5, cytC_qs5,'linewidth',2,'Color','red'); 
-plot(JO2(1,[1 2 5])*600,C(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
-plot(JO2(2,[1 2 5])*600,C(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(1,[1 2 5])*580,C(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(2,[1 2 5])*580,C(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
 xlabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
 ylabel('Cyt c$^{2+}$ (normalized)','interpreter','latex')
 axis([0 100 0 0.4]); box on
@@ -257,8 +257,8 @@ axis([0 100 0 0.4]); box on
 axes('position',[0.575 0.125 0.40 0.40]); hold on
 plot(J_o2_qs1, ADP_qs1*1e3,'linewidth',2,'Color','blue'); 
 plot(J_o2_qs5, ADP_qs5*1e3,'linewidth',2,'Color','red'); 
-plot(JO2(1,:)*600,D(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
-plot(JO2(2,:)*600,D(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(1,:)*580,D(1,:),'bo','MarkerFaceColor',[1 1 1],'linewidth',2)
+plot(JO2(2,:)*580,D(2,:),'ro','MarkerFaceColor',[1 1 1],'linewidth',2)
 xlabel('$J_{o2}$ (nmol O$_2$ min$^{-1}$ UCS$^{-1}$)','interpreter','latex')
 ylabel('[ADP]$_e$ (M)','interpreter','latex')
 axis([0 100 0 0.7]); box on

@@ -51,8 +51,8 @@ x0(16) = 1e-9;          % oxoglutarate
 x0(17) = 30e-9;         % Ca matrix
 x0(18) = 2e-3 - 1e-9;   % GDP, matrix
 x0(19) = 1e-9;          % GTP, matrix
-x0(20) = 1e-9;          % CoQ, oxidised
-x0(21) = Qtot - 1e-9;   % CoQ, reduced
+x0(20) = Qtot - 1e-9;   % CoQ, oxidised
+x0(21) = 1e-9;          % CoQ, reduced
 x0(22) = 1e-9;          % fumarate, matrix
 x0(23) = 1e-9;          % malate, matrix
 x0(24) = 1e-9;          % aspartate, matrix
@@ -63,7 +63,7 @@ x0(31) = 1e-12;         % mito SO
 x0(34) = 0.19e-3;       % O2, matrix     
 x0(54) = 10^-(7.4);     % H, matrix
 x0(55) = 1.2e-3;        % Mg, matrix
-x0(56) = 0.070;         % K, matrix
+x0(56) = 0.050;         % K, matrix
 
 % IM VARIABLES
 x0(32) = Ctot - 1e-12;  % cytochrome c, ox
@@ -106,7 +106,7 @@ x0(65) = 1.0; % initial PDH activity
 x0(66) = NADPtot; % initial NADP_matrix
 x0(67) = 0; % initial NADPH_matrix
 x0(68) = 0; % initial AMP_buffer
-x0(69) = 0; % K+ leak activity
+x0(69) = 0; % Hleak activity
 
 %% Simulations
 
@@ -122,7 +122,7 @@ for j = 1:length(doi)
   if (i == 1) || (i == 2)
     x_ATPase = 0;
   else
-    x_ATPase = 0.38e-6;
+    x_ATPase = 0.40e-6;
   end
 
   % State 1 simulation
@@ -155,17 +155,25 @@ end
 
 Vmito = 0.001; % [=] l mito (l cuvette)^{-1} 
 clear J_ETC4_im_to_matrix
-clear J_ROS
+clear JSO1 JH2O2 JSO3 J_SDH_SO J_SDH_H2O2 J_ROS
 % computing fluxes
 for j = 1:length(doi)
   i = doi(j);
   for ii = 1:length(tsim_ox{i})
     [fco,Jco] = dXdT(0,xsim_ox{i}(ii,:)', T,BX,K_BX,Pflag, x_ATPase );
     J_ETC4_im_to_matrix{i}(ii) = Jco(17)/2; % J_O2 in mol / sec / L mito
-    J_ROS{i}(ii) = Jco(44);
+
+    % The ROS fluxes
+    JSO1{i}(ii) = Jco(44); 
+    JH2O2{i}(ii) = Jco(45) ;
+    JSO3{i}(ii) = Jco(46);
+    J_SDH_SO{i}(ii) = Jco(47);
+    J_SDH_H2O2{i}(ii) = Jco(48);
+    J_ROS{i}(ii) = Jco(44) + Jco(45) + Jco(46) + Jco(47) + Jco(48);
   end
+
   % Accounting for electrode response time
-  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_ox{i}, 0, options2, tsim_ox{i}, J_ETC4_im_to_matrix{i}+0*J_ROS{i} );  
+  [t,J_electrode] = ode15s(@dXdT_electrode, tsim_ox{i}, 0, options2, tsim_ox{i}, J_ETC4_im_to_matrix{i} );  
   J_o2_el{i} =  J_electrode*60/674*(1e9)*Vmito;
 
   % NADH calculation
@@ -178,45 +186,6 @@ for j = 1:length(doi)
 
 end
 
-% % run again with Pflag = 1 to compute NADH kinetics (open system)
-% Pflag = 1;
-% for j = 1:length(doi)
-%   i = doi(j)
-% 
-%   % State 1 simulation
-%   xsim0 = x00;
-%   xsim0(29) = phosphate(i)*1e-3 ; % setting Pi, buffer 
-%   [tsim1,xsim1] = ode15s(@dXdT, [0 130], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase ); 
-%   
-%   % State 2 simulation
-%   xsim0 = xsim1(end,:);
-%   xsim0(46) = pyr(i)*1e-3 ; % setting pyruvate, buffer 
-%   xsim0(52) = mal(i)*1e-3 ; % setting malate, buffer 
-%   xsim0(49) = suc(i)*1e-3 ; % setting succinate, buffer 
-%   xsim0(50) = glu(i)*1e-3 ; % setting glutamate, buffer 
-%   xsim0(43) = akg(i)*1e-3 ; % setting AKG, buffer 
-%   xsim0(47) = cit(i)*1e-3 ; % setting citrate, buffer 
-%   xsim0(51) = asp(i)*1e-3 ; % setting aspartate, buffer 
-%   [tsim2,xsim2] = ode15s(@dXdT, [130 280], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase );    
-%    
-%   % State 3 simulation
-%   xsim0 = xsim2(end,:);
-% 
-%   Tend = 650;
-%   xsim0(27) = adp(i)*1e-3 ; % setting ADP_c 
-%   [tsim3,xsim3] = ode15s(@dXdT, [280 Tend], xsim0, options1,  T, BX, K_BX,Pflag, x_ATPase ); 
-%   
-%   tsim_N{i} = [tsim1; tsim2(2:end); tsim3(2:end)];
-%   xsim_N{i} = [xsim1; xsim2(2:end,:); xsim3(2:end,:)];
-%   
-%   NAD  = xsim_N{i}(:,3)';
-%   NADH = max(1e-12,NADtot - NAD);
-%   NADPH = xsim_N{i}(:,67)';
-%   Nr_sim{i} = (NADH + NADPH)/(NADtot + NADPtot);
-%   
-% end
-
-% toc
 
 %% P+M (low pyr) - low and high Pi (experiments 1, 2) 
     
@@ -454,8 +423,8 @@ figure(35); clf;
 
 axes('position',[0.125 0.540 0.40 0.40]); hold on;
 pp = plot(tJ_17,J_17,'linewidth',2); pp.Color = 'g'; 
-pp = plot(tJ_35,J_35,'linewidth',2); pp.Color = 'cyan'; 
-pp = plot(tJ_37,J_37,'linewidth',2); pp.Color = 'y'; 
+pp = plot(tJ_35,J_37,'linewidth',2); pp.Color = 'cyan'; 
+pp = plot(tJ_37,J_35,'linewidth',2); pp.Color = 'y'; 
 plot(tsim_ox{17}, J_o2_el{17}, 'k-', 'linewidth', 2)
 plot(tsim_ox{35}, J_o2_el{35}, 'k-', 'linewidth', 2)
 plot(tsim_ox{37}, J_o2_el{37}, 'k-', 'linewidth', 2)
@@ -468,8 +437,8 @@ text(225,107.5,'Low Pi (0.5 mM)','fontsize',12,'interpreter','latex')
 
 axes('position',[0.550 0.540 0.40 0.40]); hold on;
 pp = plot(tJ_18,J_18,'linewidth',2); pp.Color = 'g'; 
-pp = plot(tJ_36,J_36,'linewidth',2); pp.Color = 'cyan'; 
-pp = plot(tJ_38,J_38,'linewidth',2); pp.Color = 'y'; 
+pp = plot(tJ_36,J_38,'linewidth',2); pp.Color = 'cyan'; 
+pp = plot(tJ_38,J_36,'linewidth',2); pp.Color = 'y'; 
 
 plot(tsim_ox{18}, J_o2_el{18}, 'k-', 'linewidth', 2)
 plot(tsim_ox{36}, J_o2_el{36}, 'k-', 'linewidth', 2)
@@ -480,7 +449,7 @@ set(gca,'xtick',0:100:600);
 axis([100 650 0 100]); box on
 text(225,107.5,'High Pi (2.5 mM)','fontsize',12,'interpreter','latex')
 
-% Plots of metabolite measuremenst for exps. 3 & 4
+%% Plots of metabolite measuremenst for exps. 3 & 4
 
 % total metabolite levels, high and low Pi
 ATP_lp =  xsim_ox{3}(:,27)*(1 - Vmito) + Vmito*VWater_matrix* xsim_ox{3}(:,10) + Vmito*VWater_im* xsim_ox{3}(:,35);

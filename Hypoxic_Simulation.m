@@ -50,8 +50,8 @@ x0(16) = 1e-9;          % oxoglutarate
 x0(17) = 30e-9;         % Ca matrix
 x0(18) = 2e-3 - 1e-9;   % GDP, matrix
 x0(19) = 1e-9;          % GTP, matrix
-x0(20) = Qtot - 1e-9;          % CoQ, oxidised
-x0(21) = 1e-9;   % CoQ, reduced
+x0(20) = Qtot - 1e-9;    % CoQ, oxidised
+x0(21) = 1e-9;          % CoQ, reduced
 x0(22) = 1e-9;          % fumarate, matrix
 x0(23) = 1e-9;          % malate, matrix
 x0(24) = 1e-9;          % aspartate, matrix
@@ -62,7 +62,7 @@ x0(31) = 1e-12;         % mito SO
 x0(34) = 0.19e-3;       % O2, matrix     
 x0(54) = 10^-(7.4);     % H, matrix
 x0(55) = 1.2e-3;        % Mg, matrix
-x0(56) = 0.070;         % K, matrix
+x0(56) = 0.050;         % K, matrix
 
 % IM VARIABLES
 x0(32) = Ctot - 1e-12;  % cytochrome c, ox
@@ -110,7 +110,7 @@ x0(69) = 0; % K+ leak activity
 %% Simulations
 
 
-x_ATPase = 0.38e-6;
+x_ATPase = 0.40e-6;
 
 % initial simulation to anoxia
 xsim0 = x0;
