@@ -2112,6 +2112,7 @@ J_GLUH_im_to_matrix = x_GLUH * (glutamate2*h_im - glutamate1*h_matrix);
 J_CITMAL_im_to_matrix = 0;
 
 % AKGMAL:im_to_matrix
+alpha = 1;
 Km1 = 1.0e-3; % malate (outside) affinity
 Ka1 = 1.0e-3; % akg (outside) affinity
 Km2 = alpha*Km1; % thermo constraint
