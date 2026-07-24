@@ -2063,7 +2063,7 @@ a = glutamate_matrix;
 b = NAD_matrix;
 r = NADH_free;
 p = ketoglutarate_matrix;
-q = ammonia_matrix; % DAB: assume no ammonia build up
+q = ammonia_matrix; 
 KmA=3.5e-3;
 KmB=80e-6;
 KmP=1.1e-3;
@@ -2082,6 +2082,12 @@ KiB*KmA*KmP*q*r/KmQ/KiP/KiR+KiB*KmA*KmP*p*q*r/KmQ/KiP/KiR+a*b*p/KiP+...
 KiB*KmA*KmP*q/KmQ/KiP+KiB*KmA*a*p*r/KiA/KiP/KiR+KiB*KmA*p*r/KiP/KiR+...
 KmR*KmA*p*q*b/KmQ/KiP/KiR+KiB*KmA*a*p*q*r/KmQ/KiA/KiP/KiR;
 J_GDH1_matrix = Vmf_GDH1*(a*b-p*q*r/Keq_GDH_matrix)/Den;
+if a <= 0
+  J_GDH1_matrix = min(J_GDH1_matrix,0);
+end
+if q <= 0
+  J_GDH1_matrix = max(J_GDH1_matrix,0);
+end
 
 % ASPGLU
 Keq_ASPGLU = exp( +(1*F*DPsi_im_to_matrix)/RT)/P(24)*P(25)/P(39)*P(40);
@@ -2096,7 +2102,7 @@ a2 = aspartate_matrix/P(24)/Ka2;
 d1 = 1 + g1 + a1;
 d2 = 1 + g2 + a2;
 x_ASPGLU = 0.10;
-if (g1 + a1 >0)&&(g2 + a2 >0)
+if (g1 + a1 >1e-6)||(g2 + a2 >1e-6)
   J_ASPGLU_im_to_matrix = x_ASPGLU*(g1*a2*Keq_ASPGLU - g2*a1 )/( d1*(g2+a2) + d2*(g1 + a1) );
 else
   J_ASPGLU_im_to_matrix = 0;
@@ -2112,7 +2118,7 @@ J_GLUH_im_to_matrix = x_GLUH * (glutamate2*h_im - glutamate1*h_matrix);
 J_CITMAL_im_to_matrix = 0;
 
 % AKGMAL:im_to_matrix
-alpha = 1;
+alpha = 1.0;
 Km1 = 1.0e-3; % malate (outside) affinity
 Ka1 = 1.0e-3; % akg (outside) affinity
 Km2 = alpha*Km1; % thermo constraint
@@ -2278,7 +2284,7 @@ f(68,:) = ( + J_AK_buffer) / VWater_buffer; % AMP_buffer
 J_ROS = JSO1 + JH2O2 + JSO3 + J_SDH_SO + J_SDH_H2O2;
 J0 = 0.5e-4;
 J1 = 0.5e-4;
-tau_HLE1 = 2;
+tau_HLE1 = 5;
 tau_HLE2 = 469.18;
 HLE_inf = 0.5*(1 + tanh((J_ROS - J0)/J1) );
 if HLE_inf > HLE 
